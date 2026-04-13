@@ -9,7 +9,7 @@ _Method: ODD (Outcome-Driven Development)_
 
 **Phase A — Foundation gaps** (in progress)
 
-Outcomes 1 and 2 are partially built. Outcomes 4, 4b, 4c are not yet started.
+Outcome 1 verified. Outcome 2 partially built. Outcomes 3, 4, 4b, 4c not yet started.
 
 ---
 
@@ -19,7 +19,7 @@ Outcomes 1 and 2 are partially built. Outcomes 4, 4b, 4c are not yet started.
 
 | # | Outcome | Persona | Status | Notes |
 |---|---|---|---|---|
-| 1 | Sam configures passwordless login | Sam | ⚠️ In progress | Admin prototype live at `quick-secure-auth-admin.vercel.app`. Toggle + expand + dropdowns + inactivity timer exist. Gaps remain before verification. |
+| 1 | Sam configures passwordless login | Sam | ✅ Verified | Admin prototype live at `quick-secure-auth-admin.vercel.app`. Toggle + expand + dropdowns (face, QR, NFC, RFID) + inactivity timer. Primary excluded from fallbacks. `org.authConfig` contract complete. |
 | 2 | Sam shares login link with workers | Sam | ⚠️ In progress | Share card UI (copy link + download QR) exists. Gaps remain before verification. |
 | 3 | Jeeves opens the app | Jeeves | ⚠️ Partial | WelcomeScreen + LoadingScreen exist in Expo project. MDM deep link handling not built. |
 | 4 | Jeeves enters his identifier | Jeeves | ⚠️ Partial | LoginScreen exists. Routes on `@` detection only — needs org auth config routing. |

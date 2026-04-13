@@ -20,7 +20,7 @@ Phase B cannot start until Phase A is fully verified.
 
 ## Phase A — Foundation gaps
 
-### Outcome 1 — Sam configures passwordless login ⚠️ in progress
+### Outcome 1 — Sam configures passwordless login ✅ verified
 
 **Persona:** Sam | **Platform:** Web admin
 
@@ -28,9 +28,9 @@ Phase B cannot start until Phase A is fully verified.
 - [x] Three login option toggles (Passwordless, Shared device login, PIN — disabled)
 - [x] Passwordless toggle expands: Primary method + First fallback + Second fallback dropdowns
 - [x] Inactivity logout timer control
-- [ ] Dropdown options match Oloid methods (face, QR, NFC, RFID)
-- [ ] Primary method cannot be selected as a fallback
-- [ ] `org.authConfig` contract exposed correctly for Outcome 8
+- [x] Dropdown options match Oloid methods (face, QR, NFC, RFID)
+- [x] Primary method cannot be selected as a fallback
+- [x] `org.authConfig` contract exposed correctly for Outcome 8
 
 ### Outcome 2 — Sam shares the login link with workers ⚠️ in progress
 
