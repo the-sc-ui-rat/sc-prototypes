@@ -6,10 +6,18 @@ Interactive web prototypes built at SafetyCulture. Design exploration shipped to
 
 ## Email-less Authentication
 
-Exploring an alternative auth entry point for frontline workers — login via QR code or login link using username + org ID, no email required. Designed around shared-device environments where typing an email isn't practical.
+A clickable mobile auth flow prototype for SafetyCulture users who don't have an email address associated with their account. Frontline workers log in with a username and Organisation ID rather than an email — this prototype explores what that flow should look and feel like on mobile, using SC design system tokens and components.
+
+Covers three flows: standard email entry, email-less (QR code / login link), and admin configuration (enable email-less, generate invite links, download QR codes for physical locations).
 
 **Stack:** React 19 · Vite · TypeScript · Tailwind CSS 4  
-**Live:** [app-two-vert.vercel.app](https://app-two-vert.vercel.app)
+**Built with:** Claude Code + Figma MCP
+
+| Flow | Live |
+|---|---|
+| Default SC login | [app-two-vert.vercel.app](https://app-two-vert.vercel.app) |
+| Admin flow | [app-two-vert.vercel.app/?flow=admin](https://app-two-vert.vercel.app/?flow=admin) |
+| Invite link flow | [app-two-vert.vercel.app/?flow=invite](https://app-two-vert.vercel.app/?flow=invite) |
 
 ---
 
