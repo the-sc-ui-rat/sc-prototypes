@@ -1,33 +1,46 @@
 # STATE.md — Quick Secure Auth
 
-_Last updated: 2026-03-17_
+_Last updated: 2026-04-13_
+_Method: ODD (Outcome-Driven Development)_
 
 ---
 
-## Current milestone
+## Current phase
 
-Milestone 2 — Flow 1: Default entry
+**Phase A — Foundation gaps** (in progress)
 
-## Current epic
+Outcomes 1 and 2 are partially built. Outcomes 4, 4b, 4c are not yet started.
 
-Epic 2.1 — Welcome screen (first screen in Flow 1)
+---
 
-## Status
+## Outcome status
 
-### Built (Milestone 1 + partial Milestone 3)
-- [x] Expo project initialised, SC tokens configured
-- [x] IdleLockScreen — SC-branded idle state, last-user chip, 3 auth affordances (this is Flow 2 / shared device)
-- [x] FaceScanScreen — oval animation, 5-state machine, mocked Oloid API, Austin Turner
-- [x] oloidMock.ts — simulates POST /credentials/face/login, 1.8s latency
-- [x] GSD docs rewritten to reflect full scope (all 7 flows, 7 scenarios)
-- [x] README FLW table populated
+### Phase A — Foundation
 
-### Next actions (Milestone 2 — Flow 1)
-1. Welcome screen (Screen 1) — illustration + "Sign up for free" / "Log in"
-2. Log in screen (Screen 2) — username field + routing logic
-3. Face scan screen (Screen 3) — reuse/adapt FaceScanScreen, connect from login
-4. Confirmation card (Screen 4) — camera bg + welcome card slide-up
-5. Home screen (Screen 5) — Southern Logistics org home
+| # | Outcome | Persona | Status | Notes |
+|---|---|---|---|---|
+| 1 | Sam configures passwordless login | Sam | ⚠️ In progress | Admin prototype live at `quick-secure-auth-admin.vercel.app`. Toggle + expand + dropdowns + inactivity timer exist. Gaps remain before verification. |
+| 2 | Sam shares login link with workers | Sam | ⚠️ In progress | Share card UI (copy link + download QR) exists. Gaps remain before verification. |
+| 3 | Jeeves opens the app | Jeeves | ⚠️ Partial | WelcomeScreen + LoadingScreen exist in Expo project. MDM deep link handling not built. |
+| 4 | Jeeves enters his identifier | Jeeves | ⚠️ Partial | LoginScreen exists. Routes on `@` detection only — needs org auth config routing. |
+| 4b | MDM deep link pre-scopes org | Jeeves | ❌ Not started | LoginScreen should pre-fill org context when arriving via MDM deep link. |
+| 4c | better-auth.com + Oloid OAuth | Both | ❌ Not started | Shared auth infrastructure — Oloid as OAuth provider. Open question: does better-auth run on Vercel? |
+
+### Phase B — Auth path gaps (parallel)
+
+| # | Outcome | Persona | Status | Notes |
+|---|---|---|---|---|
+| 5 | Jeeves logs in via SSO | Jeeves | ⚠️ Verify | EmailPasswordScreen (SSO button) exists. Pixel-perfect Figma check pending. |
+| 6 | Jeeves logs in via email + password | Jeeves | ⚠️ Verify | EmailPasswordScreen exists. Pixel-perfect Figma check pending. |
+| 7 | Jeeves logs in email-less | Jeeves | ⚠️ Partial | PasswordScreen (username path) exists. Org ID pre-fill from MDM deep link not built. |
+| 8 | Jeeves logs in via Oloid | Jeeves | ⚠️ Partial | KioskScreen + FaceAuthScreen + QRAuthScreen + NFCAuthScreen + RFIDAuthScreen all exist. Fallback chain must be wired from `org.authConfig` (Outcome 1) instead of static dev bar. |
+
+### Phase C — Completion
+
+| # | Outcome | Persona | Status | Notes |
+|---|---|---|---|---|
+| 9 | Auth success | Both | ⚠️ Verify | IdentityConfirmScreen exists. Must show correct name + org for all auth paths. |
+| 10 | Jeeves can't remember his username | Jeeves | ⚠️ Partial | ForgotScreen exists (email path only). Email-less recovery path not built. |
 
 ---
 
@@ -35,15 +48,12 @@ Epic 2.1 — Welcome screen (first screen in Flow 1)
 
 | Date | Decision | Rationale |
 |---|---|---|
-| 2026-03-17 | GSD docs rewritten with full scope | Original docs only covered shared device face auth. Scope is 3 contexts (shared, personal, fast-switch) + 7 flows. |
-| 2026-03-17 | Flow 1 (default entry) built before Flow 2 polish | Gives customer testing a direct comparison to current SC baseline. |
+| 2026-04-13 | Docs rewritten to ODD format | Project moved from GSD to ODD methodology. Milestones/Epics replaced by Phases/Outcomes. |
+| 2026-04-13 | native/ replaced with SC-Oloid-Prototype | SC-Oloid-Prototype is the canonical FLW Expo prototype — more complete than the original native/ content. |
 | 2026-03-17 | Oloid handles all methods: face, QR, NFC, RFID | All confirmed for customer use. Not exploratory. |
-| 2026-03-17 | Fast-user switching: online first, offline later | Offline (Glencore blocker) requires local face matching — architectural decision for engineering. Prototype online first. |
-| 2026-03-17 | Handheld pool devices = primary context | Site visits confirm majority are handheld, not mounted. Design for handheld; mounted is a variation. |
+| 2026-03-17 | Fast-user switching: online first, offline later | Offline (Glencore blocker) requires local face matching — engineering decision. Prototype online first. |
 | 2026-03-17 | Camera is simulated in prototype | No expo-camera dependency. Dark bg + oval overlay is sufficient for FLW customer testing. |
 | 2026-03-17 | Auto-trigger camera on app open: rejected | FLW-dude: surveillance feel, fails on PPE, breaks always-on mounted deployments. Auth initiates on tap only. |
-| 2026-03-16 | Expo over native Xcode/Android Studio | Expo Go makes sharing trivial; single codebase for iOS + Android. |
-| 2026-03-16 | Reusing app-two-vert.vercel.app | Shared Vercel deployment with Email-less project (?flow parameter routing). |
 
 ---
 
@@ -56,36 +66,23 @@ When a flow is validated, the output to engineering is:
 2. Expo prototype link / Expo Go QR (interaction reference)
 3. `/native-handoff` output doc (annotated spec for Sarina + Andrew)
 
-Sarina (Kotlin/Compose) and Andrew (SwiftUI) rebuild natively from these three inputs. They do not run or extend the Expo code.
+Sarina (Kotlin/Compose) and Andrew (SwiftUI) rebuild natively from these three inputs.
 
 ---
 
-## Reminder: set up Xcode
+## Open questions
 
-> When you have time — set up a bare Xcode project alongside the Expo folder using Andrew's method:
-> 1. Create an empty iOS project in Xcode in a new folder
-> 2. Run Claude Code inside that folder
-> 3. Connect Figma MCP
-> 4. Use it to generate SwiftUI screens directly for demos that need true native feel
->
-> Not urgent for current prototype work. Revisit before handing off Flow 1 to Andrew.
-
----
-
-## Blockers
-
-None.
+1. Does better-auth.com run cleanly on Vercel? (Outcome 4c — raised by Luke Donnet, not yet confirmed)
+2. Is "Log in with code" (temp code to email) the same action as the password reset link, or a separate flow? (Outcome 10)
 
 ---
 
 ## Figma references
 
-| Screen | Node ID | Description |
+| Screen / section | Node ID | Description |
 |---|---|---|
-| Full Flow 1 sequence | 1035:10470 | Section containing all 5 screens |
-| Welcome (#1) | 870:7672 | Illustration + Sign up / Log in |
-| Log in (#2) | 1006:4853 | SC logo + username field + Continue |
-| Face scan (#3) | 1002:7508 | Camera bg + SC logo + secondary auth |
-| Confirmation (#4) | 1035:6952 | Camera bg + welcome card (Jane Smith) |
-| Home (#5) | 1035:9841 | Southern Logistics home |
-| Scenario overview | 995:63 | 7 scenarios table + 5 flow cards |
+| Admin login settings | 1002:7977 | Organization Settings > Login tab |
+| Flow 1 sequence | 1035:10470 | All 5 FLW screens |
+| Face scan | 1002:7508 | Camera + oval + secondary affordances |
+| Confirmation | 1035:6952 | Welcome card slide-up |
+| Scenario overview | 995:63 | 7 scenarios + 5 flow cards |

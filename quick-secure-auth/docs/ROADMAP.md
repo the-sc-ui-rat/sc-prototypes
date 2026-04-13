@@ -1,123 +1,148 @@
 # ROADMAP.md — Quick Secure Auth
 
+_Method: ODD (Outcome-Driven Development)_
 _Prototype-first. Build to validate with customers, not to hand off to engineers._
-_Last updated: 2026-03-17_
+_Last updated: 2026-04-13_
 
 ---
 
-## Milestone 1 — Foundation ✅
+## Build sequence
 
-- [x] GSD docs created
-- [x] Expo project initialised (native/)
-- [x] SC design tokens configured (tokens.ts)
-- [x] Vercel connected (app-two-vert.vercel.app)
+```
+Phase A:  1 (web) + 2 (web) → 3 (verify) → 4 + 4b + 4c
+Phase B:  5 + 6 + 7 + 8  (parallel — gaps only)
+Phase C:  9 (verify) → 10 (update)
+```
 
----
-
-## Milestone 2 — Flow 1: Default entry (current)
-
-> FLW on personal device / first-use. Username → face auth → home.
-> Figma reference: node 1035:10470
-
-### Epic 2.1 — Welcome screen (Screen 1)
-- [ ] Illustration (2 workers, chat bubbles, plane)
-- [ ] Tagline: "Create checklists. Conduct inspections. Generate and share reports."
-- [ ] "Sign up for free" primary button
-- [ ] "Log in" secondary button
-
-### Epic 2.2 — Log in screen (Screen 2)
-- [ ] SC logo top-centre
-- [ ] "Log in" heading
-- [ ] "Email or username" field
-- [ ] "Continue" primary button
-- [ ] "Forgot username?" text link
-- [ ] System routing logic: on Continue → check user config → route to face scan
-
-### Epic 2.3 — Face scan screen (Screen 3)
-- [ ] Full-screen camera feed (simulated)
-- [ ] SC logo top-centre (light/white version)
-- [ ] Oval overlay with animated border (SC accent → green on success)
-- [ ] Mocked Oloid API call (1.8s latency → returns Austin Turner)
-- [ ] "or sign in with" divider
-- [ ] "QR Code" | "Username and password" secondary buttons
-- [ ] "Tap NFC tag at the device" text link
-
-### Epic 2.4 — Confirmation card (Screen 4)
-- [ ] Camera feed persists as background
-- [ ] Card slides up from bottom: user avatar + "Welcome back [Name]" + email
-- [ ] Mint/light-green card tint (per Figma)
-- [ ] Auto-advances to home after 2s
-
-### Epic 2.5 — Home screen (Screen 5)
-- [ ] Org header: "SL" avatar + "Southern Logistics" + dropdown arrow
-- [ ] Bell + user avatar right actions
-- [ ] Stat cards: "4 Training" + "3 Issues"
-- [ ] "In progress 10" section: horizontal scroll of inspection cards
-- [ ] Agenda section: All/Inspections/Actions tabs
-- [ ] Accordion rows: Overdue / Today / Upcoming / No date
-- [ ] Bottom nav: Home, Inspections, Actions, Training, More
+Phase B cannot start until Phase A is fully verified.
 
 ---
 
-## Milestone 3 — Flow 2: Shared device (face-first)
+## Phase A — Foundation gaps
 
-> Pre-configured org. FLW picks up device, no username entry.
-> **Partially built** — IdleLockScreen + FaceScanScreen exist, need polish.
+### Outcome 1 — Sam configures passwordless login ⚠️ in progress
 
-### Epic 3.1 — Idle / lock screen _(partially built)_
-- [x] SC wordmark
-- [x] Last-user chip
-- [x] Face ID icon
-- [x] "Sign in with Face ID" primary CTA
-- [x] QR + Password secondary affordances
-- [x] Site footer
-- [ ] Org logo (replaces SC wordmark when org is configured)
-- [ ] NFC affordance
+**Persona:** Sam | **Platform:** Web admin
 
-### Epic 3.2 — Face scan screen _(partially built)_
-- [x] Dark bg, oval, animated border
-- [x] 5-state machine (idle → detecting → scanning → recognised → failed)
-- [x] Mocked Oloid API
-- [x] Fallback sheet on failure
-- [ ] Connect to Flow 1 face scan (shared component)
+- [x] Organization Settings > Login tab navigation
+- [x] Three login option toggles (Passwordless, Shared device login, PIN — disabled)
+- [x] Passwordless toggle expands: Primary method + First fallback + Second fallback dropdowns
+- [x] Inactivity logout timer control
+- [ ] Dropdown options match Oloid methods (face, QR, NFC, RFID)
+- [ ] Primary method cannot be selected as a fallback
+- [ ] `org.authConfig` contract exposed correctly for Outcome 8
+
+### Outcome 2 — Sam shares the login link with workers ⚠️ in progress
+
+**Persona:** Sam | **Platform:** Web admin
+
+- [x] Org-specific URL visible in share card
+- [x] Copy link button
+- [x] Download QR code button
+- [ ] Copied link and QR resolve to correct org-scoped login URL
+- [ ] Verified that a device arriving via the link lands pre-scoped (no org ID entry)
+
+### Outcome 3 — Jeeves opens the app ⚠️ partial
+
+**Persona:** Jeeves | **Platform:** Expo (iPad)
+
+- [x] WelcomeScreen — illustration + tagline + Sign up / Log in CTAs
+- [x] LoadingScreen — transition state
+- [ ] MDM deep link handling — pre-scopes org when arriving via Outcome 2 URL
+- [ ] Active session bypass — landing directly in app if already authenticated
+
+### Outcome 4 — Jeeves enters his identifier ⚠️ partial
+
+**Persona:** Jeeves | **Platform:** Expo (iPad)
+
+- [x] LoginScreen — username/email field + Continue
+- [ ] Org auth config routing — checks `org.authConfig` to route to the correct auth flow
+- [ ] Currently routes on `@` detection only — must route by actual org configuration
+
+### Outcome 4b — MDM deep link pre-scopes org ❌ not started
+
+**Persona:** Jeeves | **Platform:** Expo (iPad)
+
+- [ ] LoginScreen pre-fills org context when opened via MDM deep link (Outcome 2 URL)
+- [ ] Jeeves does not need to enter org ID when arriving via link
+
+### Outcome 4c — better-auth.com + Oloid as OAuth provider ❌ not started
+
+**Persona:** Both | **Platform:** Shared infrastructure
+
+- [ ] better-auth.com configured with Oloid as OAuth provider
+- [ ] SSO connection wired
+- [ ] Shared auth infrastructure backing Outcomes 5–8
+- ⚠️ Open question: does better-auth.com run on Vercel?
 
 ---
 
-## Milestone 4 — Fallback chain
+## Phase B — Auth path gaps (parallel)
 
-### Epic 4.1 — QR code screen (Flow 3)
-- [ ] Camera in QR mode
-- [ ] Scan instruction
-- [ ] Match → confirmation card
-- [ ] Error state
+All four outcomes can be built simultaneously once Phase A is verified.
 
-### Epic 4.2 — Username + password (Flow 4)
-- [ ] Login card (username pre-filled if known)
-- [ ] Password field
-- [ ] Error states (wrong credentials, 3-failure contact admin)
+### Outcome 5 — Jeeves logs in via SSO ⚠️ verify
+
+**Persona:** Jeeves | **Platform:** Expo (iPad)
+
+- [x] EmailPasswordScreen with SSO button exists
+- [ ] Pixel-perfect check against Figma
+- [ ] SSO wired to better-auth.com (Outcome 4c)
+
+### Outcome 6 — Jeeves logs in via email + password ⚠️ verify
+
+**Persona:** Jeeves | **Platform:** Expo (iPad)
+
+- [x] EmailPasswordScreen (email + password path) exists
+- [ ] Pixel-perfect check against Figma
+- [ ] Produces `session.authToken` in correct shape
+
+### Outcome 7 — Jeeves logs in email-less ⚠️ partial
+
+**Persona:** Jeeves | **Platform:** Expo (iPad)
+
+- [x] PasswordScreen (username path) exists
+- [ ] Org ID pre-fill from MDM deep link context (requires Outcome 4b)
+- [ ] Produces `session.authToken` in correct shape
+
+### Outcome 8 — Jeeves logs in via Oloid (passwordless) ⚠️ partial
+
+**Persona:** Jeeves | **Platform:** Expo (iPad)
+
+- [x] KioskScreen — shared device idle/entry point
+- [x] FaceAuthScreen — face recognition flow
+- [x] NFCAuthScreen — NFC tap flow
+- [x] RFIDAuthScreen — RFID flow
+- [x] QRAuthScreen — QR code flow
+- [x] AuthenticatingScreen — processing state
+- [x] AuthFailedScreen — failure + fallback prompt
+- [ ] Fallback chain wired from `org.authConfig` (Outcome 1) — currently uses static dev bar
+- [ ] Auth method driven by org config, not dev toggle
 
 ---
 
-## Milestone 5 — Fast-user switching (Flow 5, online)
+## Phase C — Completion
 
-- [ ] "Switch user" chip variant on idle screen
-- [ ] Previous user dimmed during scan
-- [ ] New user confirmation + session clear
+### Outcome 9 — Auth success ⚠️ verify
+
+**Persona:** Both | **Platform:** Expo (iPad)
+
+- [x] IdentityConfirmScreen — name + org + welcome card
+- [ ] Correct name + org shown for all auth paths (5, 6, 7, 8)
+- [ ] Produced by a valid `session.authToken` in all cases
+
+### Outcome 10 — Jeeves can't remember his username ⚠️ partial
+
+**Persona:** Jeeves | **Platform:** Expo (iPad)
+
+- [x] ForgotScreen — email recovery path exists
+- [ ] Email-less recovery path — "Recover your account" two-path screen
+- ⚠️ Open question: is "Log in with code" the same action as password reset link, or separate?
 
 ---
 
-## Milestone 6 — First-time registration (Flow 6) _(future)_
+## Future (out of current scope)
 
-Admin invite → face enrollment → NFC badge tap → done.
-
----
-
-## Milestone 7 — Offline fast-user switching (Flow 7) _(future)_
-
-Glencore blocker. Local credential cache. Zero network dependency.
-
----
-
-## Build order rationale
-
-Flow 1 first — it mirrors the existing SC auth baseline and gives us the most comparable surface for customer testing against what they use today. Flow 2 (shared device) is the target state but Flow 1 gives us the contrast story.
+- **Fast-user switching (online)** — mid-shift swap, previous user chip, new user scans
+- **First-time registration** — admin invite → face enrollment → NFC badge
+- **Offline fast-user switching** — Glencore blocker, local credential cache, zero network dependency

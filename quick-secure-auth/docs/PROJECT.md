@@ -1,7 +1,7 @@
 # PROJECT.md — Quick Secure Auth
 
 _Lead designer: Josh Ratnasingham_
-_Last updated: 2026-03-17_
+_Last updated: 2026-04-13_
 
 ---
 
@@ -35,7 +35,8 @@ Based on admin config the FLW is routed to the appropriate flow. We are designin
 - Default SC login: https://app-two-vert.vercel.app
 - Invite link flow (email-less): https://app-two-vert.vercel.app/?flow=invite
 
-These need to be recreated as native iOS + Android prototype screens.
+**Admin prototype (this project):**
+- Organization Settings > Login tab: https://quick-secure-auth-admin.vercel.app/
 
 ---
 
@@ -50,8 +51,8 @@ Handles face recognition, QR, NFC, and RFID. No embeddable SDK — integration i
 | Layer | Technology |
 |---|---|
 | iOS + Android prototype | Expo (React Native), Expo Go |
-| Web reference | React + Vite + TypeScript + Tailwind → Vercel (app-two-vert.vercel.app) |
-| Auth mock | services/oloidMock.ts — simulates Oloid API, 1.8s latency |
+| Admin web prototype | React + Vite + TypeScript + Tailwind → Vercel (quick-secure-auth-admin.vercel.app) |
+| Auth mock | Oloid API calls mocked in each auth screen — simulated latency |
 
 ---
 
