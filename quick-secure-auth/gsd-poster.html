@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSD — Get Shit Done</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: linear-gradient(97.76deg, #FFFCF6 0%, #FFFFFF 76.46%);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif;
+    padding: 32px;
+  }
+  .poster {
+    width: 1366px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .section {
+    background: #e9edf6;
+    border-radius: 24px;
+    padding: 40px;
+  }
+  .section-title {
+    font-size: 40px;
+    font-weight: 870;
+    color: #4740d4;
+    letter-spacing: -0.5px;
+    line-height: 1;
+    font-stretch: expanded;
+  }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 27px 27px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 27px 27px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 27px 27px; }
+  .col-full { grid-column: 1 / -1; }
+  .item { display: flex; flex-direction: column; gap: 4px; }
+  .item-heading { font-size: 28px; font-weight: 700; color: #000; line-height: 1; }
+  .item-heading.accent { color: rgba(86,75,231,0.9); }
+  .item-body { font-size: 14px; font-weight: 300; color: #3f3a34; letter-spacing: 0.14px; line-height: 1.5; }
+  .item-body ul, .item-body ol { padding-left: 21px; }
+  .item-body li { margin-bottom: 4px; }
+  .tool-row { display: flex; gap: 14px; align-items: center; }
+  .tool-icon {
+    width: 64px; height: 64px; border-radius: 4px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; background: #fff;
+  }
+  .tool-text { display: flex; flex-direction: column; gap: 2px; max-width: 298px; }
+  .tool-name { font-size: 18px; font-weight: 400; color: #000; }
+  .tool-desc { font-size: 14px; font-weight: 300; color: #3f3a34; letter-spacing: 0.14px; line-height: 1.4; }
+  .divider { height: 1px; background: rgba(0,0,0,0.08); margin: 8px 0; }
+  .badge {
+    display: inline-block; background: #4740d4; color: #fff;
+    font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px;
+    letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .badge.wave { background: #6559ff; }
+  .badge.context { background: #2d8a4e; }
+  .badge.verify { background: #c05621; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <!-- Header -->
+  <div class="section" style="display:flex; flex-wrap:wrap; gap: 32px 86px; align-items:flex-end;">
+    <p class="section-title">GSD — Get Shit Done</p>
+    <div class="item" style="max-width:540px;">
+      <p class="item-heading">What is GSD?</p>
+      <p class="item-body">GSD is a spec-driven, context-engineered development system built for Claude Code. It solves "context rot" — the quality degradation that happens as Claude fills its context window — by giving every agent session a fresh 200k context loaded from structured docs.</p>
+    </div>
+    <div class="item" style="max-width:540px;">
+      <p class="item-heading">BMAD vs GSD</p>
+      <p class="item-body">BMAD plans the project (Analyst → PM → Architect → PO → SM). GSD executes it. They complement each other: use BMAD to create the docs, then hand them to GSD to build story by story in parallel waves.</p>
+    </div>
+  </div>
+
+  <!-- Technical Stack -->
+  <div class="section">
+    <div class="grid-3" style="gap-row: 28px;">
+      <p class="section-title col-full" style="margin-bottom:4px;">Technical stack</p>
+      <div class="tool-row">
+        <div class="tool-icon">⚡</div>
+        <div class="tool-text">
+          <p class="tool-name">Claude Code</p>
+          <p class="tool-desc">AI-powered coding assistant. Runs GSD execution loop — Discuss → Plan → Execute → Verify</p>
+        </div>
+      </div>
+      <div class="tool-row">
+        <div class="tool-icon">🐙</div>
+        <div class="tool-text">
+          <p class="tool-name">GitHub</p>
+          <p class="tool-desc">Atomic commits per story, immediately after completion. Enables precise git bisect and clean history</p>
+        </div>
+      </div>
+      <div class="tool-row">
+        <div class="tool-icon">▲</div>
+        <div class="tool-text">
+          <p class="tool-name">Vercel</p>
+          <p class="tool-desc">Deploy web builds. Connected to GitHub — push to main = live prototype URL</p>
+        </div>
+      </div>
+      <div class="tool-row">
+        <div class="tool-icon" style="font-size:22px;">📱</div>
+        <div class="tool-text">
+          <p class="tool-name">Expo + Expo Go</p>
+          <p class="tool-desc">Single codebase → iOS + Android + Web. Share with teammates via QR code scan — no TestFlight needed</p>
+        </div>
+      </div>
+      <div class="tool-row">
+        <div class="tool-icon">🎨</div>
+        <div class="tool-text">
+          <p class="tool-name">Figma MCP</p>
+          <p class="tool-desc">Claude "sees" Figma structure and generates component code from designs. Bridge between design and code</p>
+        </div>
+      </div>
+      <div class="tool-row">
+        <div class="tool-icon">📚</div>
+        <div class="tool-text">
+          <p class="tool-name">Context7 MCP</p>
+          <p class="tool-desc">Pulls up-to-date library docs into Claude's context. Prevents stale API usage (Expo, React Native, etc.)</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Core concept -->
+  <div class="section">
+    <div class="grid-3">
+      <p class="section-title col-full">The core concept — context engineering</p>
+      <div class="item col-full" style="max-width:100%">
+        <p class="item-body">GSD keeps 4 structured documents always loaded into Claude's context. Every new session reads these first. Claude always knows: 1) What is this project? 2) What has been done? 3) What needs to be done? 4) What are we doing right now?</p>
+      </div>
+      <div class="item">
+        <p class="item-heading">PROJECT.md</p>
+        <p class="item-body">Mission, stack, design tokens, constraints, key people. The permanent project bible. Rarely changes.</p>
+      </div>
+      <div class="item">
+        <p class="item-heading">REQUIREMENTS.md</p>
+        <p class="item-body">Scenarios, flows, acceptance criteria, non-functional requirements. Source of truth for what must be built.</p>
+      </div>
+      <div class="item">
+        <p class="item-heading">ROADMAP.md</p>
+        <p class="item-body">Milestones → Epics → Stories. The sequence of work. Stories are atomic tasks deliverable in hours, not weeks.</p>
+      </div>
+      <div class="item" style="grid-column: 1; margin-top: 0;">
+        <p class="item-heading">STATE.md</p>
+        <p class="item-body">Current milestone, current epic, what's done, what's next, decisions log, blockers. Updated after every story.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4-step cycle -->
+  <div class="section">
+    <div class="grid-2">
+      <p class="section-title col-full">The 4-step execution cycle</p>
+      <div class="item col-full" style="max-width:100%">
+        <p class="item-body">Every story follows the same cycle. Claude runs it autonomously — you only intervene at Pause Gates (irreversible actions) or when blocked.</p>
+      </div>
+
+      <div class="item">
+        <span class="badge">Step 1</span>
+        <p class="item-heading">Discuss</p>
+        <p class="item-body">Read the story file. Cross-check against PROJECT, REQUIREMENTS, ROADMAP. Summarise: goal, acceptance criteria, file scope, implementation plan. Do NOT write any code until intake is complete.</p>
+      </div>
+      <div class="item">
+        <span class="badge">Step 2</span>
+        <p class="item-heading">Plan</p>
+        <p class="item-body">Research approaches. Create an atomic task plan in XML format. Group tasks into dependency waves. Verify the plan passes quality checks before execution begins.</p>
+      </div>
+      <div class="item">
+        <span class="badge wave">Step 3</span>
+        <p class="item-heading">Execute (Waves)</p>
+        <p class="item-body">Run plans in parallel waves based on dependencies. Each wave gets a fresh 200k token context. Independent tasks run simultaneously. Sequential tasks wait for prerequisites. Atomic git commit after each story.</p>
+      </div>
+      <div class="item">
+        <span class="badge verify">Step 4</span>
+        <p class="item-heading">Verify</p>
+        <p class="item-body">Run lint, type-check, build. Self-review against acceptance criteria. Invoke qa-validator agent. Fix all blocking issues. Only qa-validator can mark a story Done — Claude cannot self-certify.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workflow 1 — Setup docs -->
+  <div class="section">
+    <div class="grid-2">
+      <p class="section-title col-full">Workflow #1 — Setup GSD documents</p>
+      <div class="item">
+        <p class="item-heading">Step 1: Create project folder in GitHub</p>
+        <ul class="item-body">
+          <li>Create folder in the relevant repo (e.g. design-team-claude/projects/)</li>
+          <li>GitHub requires at least one file — start with README.md</li>
+          <li>Commit and push to main</li>
+        </ul>
+      </div>
+      <div class="item">
+        <p class="item-heading">Step 2: Create the 4 GSD docs</p>
+        <ul class="item-body">
+          <li>docs/PROJECT.md — mission, stack, tokens, constraints</li>
+          <li>docs/REQUIREMENTS.md — scenarios, flows, acceptance criteria</li>
+          <li>docs/ROADMAP.md — milestones, epics, stories</li>
+          <li>docs/STATE.md — current progress, decisions, blockers</li>
+        </ul>
+      </div>
+      <div class="item">
+        <p class="item-heading">Step 3: Load docs into every session</p>
+        <ul class="item-body">
+          <li>Start every Claude Code session from the project folder</li>
+          <li>Say: "Read PROJECT.md, REQUIREMENTS.md, ROADMAP.md, and STATE.md first"</li>
+          <li>Claude now has full context — no re-explaining needed</li>
+        </ul>
+      </div>
+      <div class="item">
+        <p class="item-heading">Step 4: Update STATE.md after each story</p>
+        <ul class="item-body">
+          <li>Tick off completed stories in ROADMAP.md</li>
+          <li>Update STATE.md with: current milestone/epic, next action, decisions, blockers</li>
+          <li>This is what keeps the next session coherent</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workflow 2 — Setup dev environment -->
+  <div class="section">
+    <div class="grid-2">
+      <p class="section-title col-full">Workflow #2 — Setup dev environment</p>
+      <div class="item">
+        <p class="item-heading">Step 1: Initialise Expo project</p>
+        <ul class="item-body">
+          <li>cd projects/quick-secure-auth/native</li>
+          <li>npx create-expo-app@latest . --template blank-typescript</li>
+          <li>Install Expo Go on your iPhone and Android test device</li>
+        </ul>
+      </div>
+      <div class="item">
+        <p class="item-heading">Step 2: Configure SC design tokens</p>
+        <ul class="item-body">
+          <li>Create src/tokens.ts with SC colour values</li>
+          <li>Use StyleSheet.create() — no Tailwind on native</li>
+          <li>Web version can use Tailwind CSS 4 with tokens.css</li>
+        </ul>
+      </div>
+      <div class="item">
+        <p class="item-heading">Step 3: Launch Claude in project folder</p>
+        <ul class="item-body">
+          <li>cd ~/Desktop/design-team-claude/projects/quick-secure-auth</li>
+          <li>Type: claude</li>
+          <li>Say: "Read all 4 GSD docs and confirm you have context"</li>
+        </ul>
+      </div>
+      <div class="item">
+        <p class="item-heading">Step 4: Run on device via Expo Go</p>
+        <ul class="item-body">
+          <li>npx expo start → QR code appears in terminal</li>
+          <li>Teammates open Expo Go app → scan QR → live prototype on device</li>
+          <li>Hot reload — changes appear instantly, no rebuild</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workflow 3 — Stories -->
+  <div class="section">
+    <div class="grid-2">
+      <p class="section-title col-full">Workflow #3 — Build stories in waves</p>
+      <div class="item">
+        <p class="item-heading">Step 1: Pick the next story from ROADMAP.md</p>
+        <ul class="item-body">
+          <li>Stories are atomic — completable in hours, not days</li>
+          <li>Each story has: goal, acceptance criteria, file scope, tasks</li>
+          <li>Sequence is strict — complete each before starting the next</li>
+        </ul>
+      </div>
+      <div class="item">
+        <p class="item-heading">Step 2: GSD execution loop prompt</p>
+        <ul class="item-body">
+          <li>"Read PROJECT.md, REQUIREMENTS.md, ROADMAP.md, STATE.md. Then implement Story [X]."</li>
+          <li>Claude runs Discuss → Plan → Execute → Verify autonomously</li>
+          <li>Only stops at Pause Gates or blockers</li>
+        </ul>
+      </div>
+      <div class="item">
+        <p class="item-heading">Step 3: Wave execution</p>
+        <ul class="item-body">
+          <li>Independent tasks run in parallel (multiple agent calls)</li>
+          <li>Sequential tasks wait for prerequisites</li>
+          <li>Each wave gets a fresh context window — no rot</li>
+        </ul>
+      </div>
+      <div class="item">
+        <p class="item-heading">Step 4: Atomic git commit + STATE update</p>
+        <ul class="item-body">
+          <li>Commit immediately after each story is Done</li>
+          <li>Message format: "feat: [story title] (Story X.X)"</li>
+          <li>Update STATE.md — tick story, update current position, log decisions</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workflow 4 — Deploy -->
+  <div class="section">
+    <div class="grid-2">
+      <p class="section-title col-full">Workflow #4 — Share & deploy</p>
+      <div class="item">
+        <p class="item-heading">Web → Vercel (desktop sharing)</p>
+        <ul class="item-body">
+          <li>Login to vercel.com with GitHub account</li>
+          <li>Connect design-team-claude repo → select projects/quick-secure-auth/web as root</li>
+          <li>Push to main → auto-deploys. Share URL with stakeholders</li>
+        </ul>
+      </div>
+      <div class="item">
+        <p class="item-heading">Native → Expo Go (device sharing)</p>
+        <ul class="item-body">
+          <li>npx expo start from native/ folder</li>
+          <li>Share QR code or tunnel URL with teammates</li>
+          <li>They install Expo Go → scan → live on their device. No App Store.</li>
+        </ul>
+      </div>
+      <div class="item">
+        <p class="item-heading">Biometric simulation (Face ID)</p>
+        <ul class="item-body">
+          <li>expo-local-authentication triggers real Face ID / fingerprint</li>
+          <li>Feels authentic in demo — stand-in for Oloid until engineering integration</li>
+          <li>NFC simulation = tap gesture with haptic feedback</li>
+        </ul>
+      </div>
+      <div class="item">
+        <p class="item-heading">Context7 MCP — stay current</p>
+        <ul class="item-body">
+          <li>Claude uses Context7 to pull latest Expo / React Native docs</li>
+          <li>Prevents using deprecated APIs (Expo updates frequently)</li>
+          <li>Already configured in your global Claude setup</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

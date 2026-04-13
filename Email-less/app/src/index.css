@@ -1,0 +1,24 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+/* Loading dots animation for primary CTA */
+@keyframes loading-dot {
+  0%, 60%, 100% { transform: scale(1); opacity: 0.4; }
+  30%            { transform: scale(1.5); opacity: 1; }
+}
+
+/* Base resets — must live inside @layer base so Tailwind utility
+   classes (which are in @layer utilities) always win the cascade.   */
+@layer base {
+  *, ::before, ::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Noto Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

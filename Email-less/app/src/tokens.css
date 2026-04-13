@@ -1,0 +1,59 @@
+/*
+ * SafetyCulture design tokens — local interim file.
+ *
+ * Replace the @theme block below with:
+ *   @import "@safetyculture/design-tokens/build/tailwind/tokens.css";
+ * once the package is published to npm.
+ */
+
+@theme {
+
+  /* ── Accent (purple) ─────────────────────────────────────────────────── */
+  --color-accent:              #6559ff;
+  --color-accent-hover:        #544af3;
+  --color-accent-active:       #493ee0;
+  --color-accent-weaker:       #dde1ff;
+  --color-accent-weakest:      #ecedfe;
+
+  --text-color-accent:         #4740d4;
+  --text-color-on-accent:      #ffffff;
+
+  --border-color-accent:       #564be7;
+
+  /* ── Negative (red / error) ──────────────────────────────────────────── */
+  --color-negative:            #cc3340;
+  --color-negative-hover:      #b32b38;
+  --color-negative-active:     #9a2530;
+  --color-negative-weakest:    #fef2f3;
+
+  --text-color-negative:       #cc3340;
+
+  --border-color-negative:     #cc3340;
+
+  /* ── Surface (white card / text / borders) ───────────────────────────── */
+  --color-surface:             #ffffff;
+  --color-surface-disabled:    #f8f9fc;
+
+  --text-color-surface:        #1f2533;
+  --text-color-surface-weaker: #3f495a;
+  --text-color-surface-weakest:#909aad;
+  --text-color-surface-disabled:#909aad;
+  --text-color-surface-placeholder:#bfc6d4;
+  --color-surface-placeholder:     #bfc6d4;
+
+  --border-color-surface:      #bfc6d4;
+  --border-color-surface-strong:#8a94a8;
+  --border-color-surface-disabled:#e9edf6;
+
+  /* ── Focus ring ──────────────────────────────────────────────────────── */
+  --color-focus:               #6559ff;
+
+  /* ── Base (screen bg / chrome) ───────────────────────────────────────── */
+  --color-base:                #e9edf6;
+  --color-base-strong:         #c8cdd6;
+
+  /* ── Black / white aliases ───────────────────────────────────────────── */
+  --color-black:               #1d2330;
+  --color-white:               #ffffff;
+
+}
