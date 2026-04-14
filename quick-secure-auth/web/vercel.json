@@ -1,0 +1,6 @@
+{
+  "buildCommand": "pnpm run build:app",
+  "outputDirectory": "app/dist",
+  "framework": "vite",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}

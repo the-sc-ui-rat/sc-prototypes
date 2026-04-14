@@ -1,0 +1,123 @@
+[
+  {
+    "id": "1",
+    "name": "Workplace Health & Safety Fundamentals",
+    "description": "Core WHS obligations for all employees",
+    "category": "safety",
+    "assignedTo": "M Hewitts",
+    "dueDate": "Apr 1, 2025",
+    "status": "in-progress",
+    "color": "bg-accent-weaker",
+    "illustrationKey": "TrainingCourses"
+  },
+  {
+    "id": "2",
+    "name": "Fire Warden Certification",
+    "description": "Emergency response procedures and evacuation coordination",
+    "category": "safety",
+    "assignedTo": "Alice Chen",
+    "dueDate": "Mar 31, 2025",
+    "status": "completed",
+    "color": "bg-positive-weaker",
+    "illustrationKey": "Certificate"
+  },
+  {
+    "id": "3",
+    "name": "Manual Handling Techniques",
+    "description": "Safe lifting and carrying methods to prevent injury",
+    "category": "safety",
+    "assignedTo": "Bob Smith",
+    "dueDate": "Apr 15, 2025",
+    "status": "not-started",
+    "color": "bg-warning-weaker",
+    "illustrationKey": "ChecklistUser"
+  },
+  {
+    "id": "4",
+    "name": "Data Privacy & GDPR Compliance",
+    "description": "Handling personal data responsibly under privacy regulations",
+    "category": "compliance",
+    "assignedTo": "Carol Williams",
+    "dueDate": "Mar 28, 2025",
+    "status": "completed",
+    "color": "bg-info-weaker",
+    "illustrationKey": "ShieldLock"
+  },
+  {
+    "id": "5",
+    "name": "Anti-Bribery & Corruption",
+    "description": "Recognising and avoiding corrupt practices in the workplace",
+    "category": "compliance",
+    "assignedTo": "M Hewitts",
+    "dueDate": "Apr 30, 2025",
+    "status": "not-started",
+    "color": "bg-negative-weaker",
+    "illustrationKey": "UserTraining"
+  },
+  {
+    "id": "6",
+    "name": "Leadership Essentials",
+    "description": "Building effective teams and developing leadership skills",
+    "category": "leadership",
+    "assignedTo": "Alice Chen",
+    "dueDate": "May 1, 2025",
+    "status": "in-progress",
+    "color": "bg-accent-weaker",
+    "illustrationKey": "CourseEditor"
+  },
+  {
+    "id": "7",
+    "name": "Forklift Operation Safety",
+    "description": "Safe operation of powered industrial trucks and forklifts",
+    "category": "technical",
+    "assignedTo": "Bob Smith",
+    "dueDate": "Apr 10, 2025",
+    "status": "completed",
+    "color": "bg-warning-weaker",
+    "illustrationKey": "CredentialTraining"
+  },
+  {
+    "id": "8",
+    "name": "Customer Service Excellence",
+    "description": "Delivering exceptional service and handling difficult situations",
+    "category": "leadership",
+    "assignedTo": "Carol Williams",
+    "dueDate": "Apr 20, 2025",
+    "status": "completed",
+    "color": "bg-positive-weaker",
+    "illustrationKey": "Trophy"
+  },
+  {
+    "id": "9",
+    "name": "Workplace Diversity & Inclusion",
+    "description": "Fostering an inclusive culture and understanding unconscious bias",
+    "category": "compliance",
+    "assignedTo": "M Hewitts",
+    "dueDate": "May 15, 2025",
+    "status": "not-started",
+    "color": "bg-info-weaker",
+    "illustrationKey": "Language"
+  },
+  {
+    "id": "10",
+    "name": "Mobile Device Security",
+    "description": "Best practices for securing company devices and data on the go",
+    "category": "technical",
+    "assignedTo": "Alice Chen",
+    "dueDate": "Apr 5, 2025",
+    "status": "in-progress",
+    "color": "bg-accent-weaker",
+    "illustrationKey": "PhoneCheck"
+  },
+  {
+    "id": "11",
+    "name": "QR Code & Digital Asset Management",
+    "description": "Using digital tools for asset tracking and reporting",
+    "category": "technical",
+    "assignedTo": "Bob Smith",
+    "dueDate": "May 30, 2025",
+    "status": "not-started",
+    "color": "bg-negative-weaker",
+    "illustrationKey": "ScanQrCode"
+  }
+]

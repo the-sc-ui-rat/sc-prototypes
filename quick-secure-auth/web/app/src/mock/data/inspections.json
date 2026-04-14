@@ -1,0 +1,123 @@
+[
+  {
+    "id": "1",
+    "templateName": "Vehicle Safety Inspection",
+    "description": "Pre-trip and post-trip vehicle checks",
+    "site": "Auckland",
+    "conductedBy": "M Hewitts",
+    "completedDate": null,
+    "status": "in-progress",
+    "color": "bg-accent-weaker",
+    "illustrationKey": "TemplateEditor"
+  },
+  {
+    "id": "2",
+    "templateName": "Fire Safety Checklist",
+    "description": "Monthly fire equipment and exit route audit",
+    "site": "Sydney",
+    "conductedBy": "Alice Chen",
+    "completedDate": "Mar 18, 2025",
+    "status": "completed",
+    "color": "bg-positive-weaker",
+    "illustrationKey": "ChecklistUser"
+  },
+  {
+    "id": "3",
+    "templateName": "Site Hazard Assessment",
+    "description": "Identify and rate potential hazards before work begins",
+    "site": "Melbourne",
+    "conductedBy": "Bob Smith",
+    "completedDate": "Mar 15, 2025",
+    "status": "completed",
+    "color": "bg-negative-weaker",
+    "illustrationKey": "SearchDocument"
+  },
+  {
+    "id": "4",
+    "templateName": "Equipment Maintenance Log",
+    "description": "Scheduled maintenance and fault reporting form",
+    "site": "Auckland",
+    "conductedBy": "Carol Williams",
+    "completedDate": null,
+    "status": "in-progress",
+    "color": "bg-warning-weaker",
+    "illustrationKey": "Stamp"
+  },
+  {
+    "id": "5",
+    "templateName": "Quality Assurance Audit",
+    "description": "ISO 9001 compliance checks for production lines",
+    "site": "Singapore",
+    "conductedBy": "Alice Chen",
+    "completedDate": "Mar 10, 2025",
+    "status": "completed",
+    "color": "bg-accent-weaker",
+    "illustrationKey": "Certificate"
+  },
+  {
+    "id": "6",
+    "templateName": "New Employee Onboarding",
+    "description": "Site induction and PPE issue checklist",
+    "site": "Sydney",
+    "conductedBy": "M Hewitts",
+    "completedDate": null,
+    "status": "in-progress",
+    "color": "bg-info-weaker",
+    "illustrationKey": "Document"
+  },
+  {
+    "id": "7",
+    "templateName": "Contractor Compliance Check",
+    "description": "Verify contractor licenses, insurance and PPE",
+    "site": "Brisbane",
+    "conductedBy": "Bob Smith",
+    "completedDate": "Mar 5, 2025",
+    "status": "completed",
+    "color": "bg-positive-weaker",
+    "illustrationKey": "Credential"
+  },
+  {
+    "id": "8",
+    "templateName": "Workplace Injury Report",
+    "description": "Document and report workplace injuries and near misses",
+    "site": "Melbourne",
+    "conductedBy": "Carol Williams",
+    "completedDate": "Feb 28, 2025",
+    "status": "completed",
+    "color": "bg-negative-weaker",
+    "illustrationKey": "Camera"
+  },
+  {
+    "id": "9",
+    "templateName": "Shift Handover Checklist",
+    "description": "End-of-shift tasks and handover notes for outgoing crew",
+    "site": "Auckland",
+    "conductedBy": "M Hewitts",
+    "completedDate": null,
+    "status": "in-progress",
+    "color": "bg-info-weaker",
+    "illustrationKey": "Clock"
+  },
+  {
+    "id": "10",
+    "templateName": "Gas Leak Inspection",
+    "description": "Routine checks for gas line integrity and sensor calibration",
+    "site": "Singapore",
+    "conductedBy": "Alice Chen",
+    "completedDate": "Feb 20, 2025",
+    "status": "completed",
+    "color": "bg-warning-weaker",
+    "illustrationKey": "GasSensor"
+  },
+  {
+    "id": "11",
+    "templateName": "Lockout / Tagout Procedure",
+    "description": "Energy isolation verification before maintenance work",
+    "site": "Brisbane",
+    "conductedBy": "Bob Smith",
+    "completedDate": null,
+    "status": "in-progress",
+    "color": "bg-accent-weaker",
+    "illustrationKey": "Lock"
+  }
+]

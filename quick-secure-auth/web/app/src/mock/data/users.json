@@ -1,0 +1,6 @@
+[
+  { "id": "me", "name": "M Hewitts", "initials": "MH" },
+  { "id": "alice", "name": "Alice Chen", "initials": "AC" },
+  { "id": "bob", "name": "Bob Smith", "initials": "BS" },
+  { "id": "carol", "name": "Carol Williams", "initials": "CW" }
+]

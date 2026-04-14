@@ -1,0 +1,132 @@
+[
+  {
+    "id": "1",
+    "name": "Vehicle Safety Inspection",
+    "description": "Pre-trip and post-trip vehicle checks",
+    "owner": "me",
+    "availableTo": "everyone",
+    "lastPublished": "Mar 12, 2025",
+    "color": "bg-accent-weaker",
+    "illustrationKey": "TemplateEditor"
+  },
+  {
+    "id": "2",
+    "name": "Fire Safety Checklist",
+    "description": "Monthly fire equipment and exit route audit",
+    "owner": "alice",
+    "availableTo": "my-team",
+    "lastPublished": "Feb 28, 2025",
+    "color": "bg-positive-weaker",
+    "illustrationKey": "ChecklistUser"
+  },
+  {
+    "id": "3",
+    "name": "New Employee Onboarding",
+    "description": "Site induction and PPE issue checklist",
+    "owner": "bob",
+    "availableTo": "everyone",
+    "lastPublished": "Jan 15, 2025",
+    "color": "bg-info-weaker",
+    "illustrationKey": "Document"
+  },
+  {
+    "id": "4",
+    "name": "Equipment Maintenance Log",
+    "description": "Scheduled maintenance and fault reporting form",
+    "owner": "me",
+    "availableTo": "specific-sites",
+    "lastPublished": "Mar 5, 2025",
+    "color": "bg-warning-weaker",
+    "illustrationKey": "Stamp"
+  },
+  {
+    "id": "5",
+    "name": "Quality Assurance Audit",
+    "description": "ISO 9001 compliance checks for production lines",
+    "owner": "carol",
+    "availableTo": "my-team",
+    "lastPublished": "Feb 1, 2025",
+    "color": "bg-accent-weaker",
+    "illustrationKey": "Certificate"
+  },
+  {
+    "id": "6",
+    "name": "Site Hazard Assessment",
+    "description": "Identify and rate potential hazards before work begins",
+    "owner": "alice",
+    "availableTo": "everyone",
+    "lastPublished": "Mar 18, 2025",
+    "color": "bg-negative-weaker",
+    "illustrationKey": "SearchDocument"
+  },
+  {
+    "id": "7",
+    "name": "Contractor Compliance Check",
+    "description": "Verify contractor licenses, insurance and PPE",
+    "owner": "me",
+    "availableTo": "specific-sites",
+    "lastPublished": "Dec 20, 2024",
+    "color": "bg-positive-weaker",
+    "illustrationKey": "Credential"
+  },
+  {
+    "id": "8",
+    "name": "Workplace Injury Report",
+    "description": "Document and report workplace injuries and near misses",
+    "owner": "carol",
+    "availableTo": "everyone",
+    "lastPublished": "Mar 1, 2025",
+    "color": "bg-negative-weaker",
+    "illustrationKey": "Camera"
+  },
+  {
+    "id": "9",
+    "name": "Shift Handover Checklist",
+    "description": "End-of-shift tasks and handover notes for outgoing crew",
+    "owner": "bob",
+    "availableTo": "my-team",
+    "lastPublished": "Feb 14, 2025",
+    "color": "bg-info-weaker",
+    "illustrationKey": "Clock"
+  },
+  {
+    "id": "10",
+    "name": "Gas Leak Inspection",
+    "description": "Routine checks for gas line integrity and sensor calibration",
+    "owner": "alice",
+    "availableTo": "specific-sites",
+    "lastPublished": "Jan 30, 2025",
+    "color": "bg-warning-weaker",
+    "illustrationKey": "GasSensor"
+  },
+  {
+    "id": "11",
+    "name": "Lockout / Tagout Procedure",
+    "description": "Energy isolation verification before maintenance work",
+    "owner": "me",
+    "availableTo": "everyone",
+    "lastPublished": "Mar 10, 2025",
+    "color": "bg-accent-weaker",
+    "illustrationKey": "Lock"
+  },
+  {
+    "id": "12",
+    "name": "Cold Storage Temperature Log",
+    "description": "Daily temperature checks for refrigerated storage units",
+    "owner": "carol",
+    "availableTo": "my-team",
+    "lastPublished": "Mar 19, 2025",
+    "color": "bg-info-weaker",
+    "illustrationKey": "Thermometer"
+  },
+  {
+    "id": "13",
+    "name": "Site Access Permit",
+    "description": "Authorisation form for visitor and subcontractor site access",
+    "owner": "bob",
+    "availableTo": "specific-sites",
+    "lastPublished": "Feb 7, 2025",
+    "color": "bg-positive-weaker",
+    "illustrationKey": "SiteFields"
+  }
+]

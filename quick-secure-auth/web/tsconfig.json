@@ -1,7 +1,24 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "declaration": true,
+    "outDir": "dist",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "paths": {
+      "@ds/*": ["./src/ds/*"],
+      "@patterns/*": ["./src/patterns/*"],
+      "@shell/*": ["./src/shell/*"],
+      "@mock/*": ["./app/src/mock/*"]
+    }
+  },
+  "include": ["src", "app"],
+  "exclude": ["node_modules", "dist"]
 }
