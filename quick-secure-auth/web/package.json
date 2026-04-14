@@ -48,6 +48,6 @@
     "react": ">=17"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["@swc/core", "esbuild", "msw"]
+    "ignoredBuiltDependencies": ["@swc/core", "esbuild", "msw"]
   }
 }
