@@ -7,125 +7,138 @@ import {
 } from '@expo-google-fonts/noto-sans';
 
 import { T } from './src/tokens';
-import { KioskScreen } from './src/screens/KioskScreen';
-import { FaceAuthScreen } from './src/screens/FaceAuthScreen';
-import { NFCAuthScreen } from './src/screens/NFCAuthScreen';
-import { RFIDAuthScreen } from './src/screens/RFIDAuthScreen';
-import { QRAuthScreen } from './src/screens/QRAuthScreen';
+import { IdleScreen } from './src/screens/IdleScreen';
+import { IdleAfterAuthScreen, LastUser } from './src/screens/IdleAfterAuthScreen';
+import { FaceScanScreen, FallbackMethod, ScanUser } from './src/screens/FaceScanScreen';
 import { AuthenticatingScreen } from './src/screens/AuthenticatingScreen';
-import { IdentityConfirmScreen } from './src/screens/IdentityConfirmScreen';
-import { AuthFailedScreen } from './src/screens/AuthFailedScreen';
+import { IdentityConfirmScreen, ConfirmedUser } from './src/screens/IdentityConfirmScreen';
 import { HomeScreen } from './src/screens/HomeScreen';
+import { QRScanScreen } from './src/screens/QRScanScreen';
+import { PasswordLoginScreen } from './src/screens/PasswordLoginScreen';
 
-type Screen =
-  | 'kiosk'
-  | 'face'
-  | 'nfc'
-  | 'rfid'
-  | 'qr'
-  | 'authenticating'
-  | 'confirm'
-  | 'failed'
-  | 'home';
+// ── Auth config — mirrors the admin prototype default ────────────────────────
+const AUTH_CONFIG = {
+  primary: 'face' as const,
+  fallbacks: ['qr', 'password'] as FallbackMethod[],
+  inactivitySeconds: 15,
+};
 
-type AuthMethod = 'face' | 'nfc' | 'rfid' | 'qr';
+// ── Mock FLW worker ───────────────────────────────────────────────────────────
+const MOCK_WORKER: ConfirmedUser & LastUser & ScanUser = {
+  name: 'Old Mate',
+  email: 'old.mate@safetyculture.io',
+  initials: 'OM',
+  org: 'Glencore Mining',
+};
+
+type Screen = 'idle' | 'idle-after-auth' | 'face-scan' | 'qr-scan' | 'password-login' | 'authenticating' | 'confirm' | 'home';
 
 export default function App() {
-  const [fontsLoaded] = useFonts({
-    NotoSans_400Regular,
-    NotoSans_700Bold,
-  });
+  const [fontsLoaded] = useFonts({ NotoSans_400Regular, NotoSans_700Bold });
+  const [screen, setScreen] = useState<Screen>('idle');
+  const [lastUser, setLastUser] = useState<LastUser | null>(null);
 
-  const [method, setMethod] = useState<AuthMethod>('face');
-  const [screen, setScreen] = useState<Screen>('kiosk');
+  if (!fontsLoaded) return <View style={{ flex: 1, backgroundColor: T.bg }} />;
 
-  if (!fontsLoaded) {
-    return <View style={{ flex: 1, backgroundColor: T.bg }} />;
-  }
+  // ── Navigation ──────────────────────────────────────────────────────────────
+  const goToFaceScan = () => setScreen('face-scan');
+  const handleAuthenticated = () => setScreen('authenticating');
+  const handleSwitchProfile = () => setScreen('face-scan');
 
-  // ── Navigation ────────────────────────────────────────────────────────────
-  const handleKioskTap = () => {
-    const dest: Record<AuthMethod, Screen> = {
-      face: 'face',
-      nfc: 'nfc',
-      rfid: 'rfid',
-      qr: 'qr',
-    };
-    setScreen(dest[method]);
-  };
-
-  const handleMethodChange = (m: AuthMethod) => {
-    setMethod(m);
-    setScreen('kiosk');
-  };
-
-  const handleAuthComplete = () => setScreen('authenticating');
-  const handleAuthenticatingComplete = () => setScreen('confirm');
-  const handleConfirmComplete = () => setScreen('home');
-  const handleNotYou = () => setScreen('kiosk');
-  const handleFastSwitch = () => setScreen('kiosk');
-  const handleTryAgain = () => setScreen('kiosk');
-  const handleDifferentMethod = () => setScreen('kiosk');
-  const handleBack = () => setScreen('kiosk');
-
-  // ── Screen renderer ───────────────────────────────────────────────────────
+  // ── Screen renderer ─────────────────────────────────────────────────────────
   const renderScreen = () => {
     switch (screen) {
-      case 'kiosk':
+      case 'idle':
+        return <IdleScreen onLogin={goToFaceScan} />;
+
+      case 'idle-after-auth':
         return (
-          <KioskScreen
-            method={method}
-            onMethodChange={handleMethodChange}
-            onTap={handleKioskTap}
+          <IdleAfterAuthScreen
+            lastUser={lastUser!}
+            onContinueAsUser={goToFaceScan}
+            onLoginAnother={goToFaceScan}
           />
         );
-      case 'face':
-        return <FaceAuthScreen onComplete={handleAuthComplete} onBack={handleBack} />;
-      case 'nfc':
-        return <NFCAuthScreen onComplete={handleAuthComplete} onBack={handleBack} />;
-      case 'rfid':
-        return <RFIDAuthScreen onComplete={handleAuthComplete} onBack={handleBack} />;
-      case 'qr':
-        return <QRAuthScreen onComplete={handleAuthComplete} onBack={handleBack} />;
+
+      case 'face-scan':
+        return (
+          <FaceScanScreen
+            fallbacks={AUTH_CONFIG.fallbacks}
+            user={MOCK_WORKER}
+            onAuthenticated={handleAuthenticated}
+            onFallback={(method) => {
+            if (method === 'qr') setScreen('qr-scan');
+            if (method === 'password') setScreen('password-login');
+          }}
+          />
+        );
+
+      case 'password-login':
+        return (
+          <PasswordLoginScreen
+            onAuthenticated={() => setScreen('authenticating')}
+            onBack={() => setScreen('face-scan')}
+          />
+        );
+
+      case 'qr-scan':
+        return (
+          <QRScanScreen
+            onScanned={() => setScreen('authenticating')}
+            onBack={() => setScreen('face-scan')}
+          />
+        );
+
       case 'authenticating':
-        return <AuthenticatingScreen onComplete={handleAuthenticatingComplete} />;
+        return <AuthenticatingScreen onComplete={() => { setLastUser(MOCK_WORKER); setScreen('home'); }} />;
+
       case 'confirm':
         return (
           <IdentityConfirmScreen
-            onComplete={handleConfirmComplete}
-            onNotYou={handleNotYou}
+            user={MOCK_WORKER}
+            onComplete={() => { setLastUser(MOCK_WORKER); setScreen('home'); }}
           />
         );
-      case 'failed':
-        return (
-          <AuthFailedScreen
-            method={method}
-            onTryAgain={handleTryAgain}
-            onDifferentMethod={handleDifferentMethod}
-          />
-        );
+
       case 'home':
-        return <HomeScreen onFastSwitch={handleFastSwitch} />;
+        return (
+          <HomeScreen
+            userName={MOCK_WORKER.name}
+            userInitials={MOCK_WORKER.initials}
+            onSwitchProfile={handleSwitchProfile}
+          />
+        );
     }
   };
 
-  // ── Dev bar ───────────────────────────────────────────────────────────────
+  // ── Dev bar ─────────────────────────────────────────────────────────────────
+  const DEV_SCREENS: { label: string; screen: Screen }[] = [
+    { label: 'idle',       screen: 'idle' },
+    { label: 'scan',       screen: 'face-scan' },
+    { label: 'qr',         screen: 'qr-scan' },
+    { label: 'password',   screen: 'password-login' },
+    { label: 'authing',    screen: 'authenticating' },
+    { label: 'home',       screen: 'home' },
+    { label: 'idle+user',  screen: 'idle-after-auth' },
+  ];
+
   const DevBar = () => (
     <View style={styles.devBar}>
       <Text style={styles.devLabel}>DEV</Text>
-      {(['face', 'nfc', 'rfid', 'qr'] as AuthMethod[]).map((m) => (
+      {DEV_SCREENS.map(({ label, screen: s }) => (
         <TouchableOpacity
-          key={m}
-          onPress={() => handleMethodChange(m)}
-          style={[styles.devBtn, method === m && styles.devBtnActive]}
+          key={s}
+          onPress={() => {
+            if (s === 'idle-after-auth') setLastUser(MOCK_WORKER);
+            setScreen(s);
+          }}
+          style={[styles.devBtn, screen === s && styles.devBtnActive]}
         >
-          <Text style={[styles.devBtnText, method === m && styles.devBtnTextActive]}>
-            {m.toUpperCase()}
-            {method === m ? ' ✓' : ''}
+          <Text style={[styles.devBtnText, screen === s && styles.devBtnTextActive]}>
+            {label}
           </Text>
         </TouchableOpacity>
       ))}
-      <Text style={styles.devScreenLabel}>  /{screen}</Text>
     </View>
   );
 
@@ -140,52 +153,31 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: T.bg,
-  },
-  safeTop: {
-    backgroundColor: 'rgba(0,0,0,0.06)',
-  },
+  root: { flex: 1, backgroundColor: T.bg },
+  safeTop: { backgroundColor: 'rgba(0,0,0,0.06)' },
   devBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
+    flexWrap: 'wrap',
+    paddingHorizontal: 10,
     paddingVertical: 5,
-    gap: 6,
+    gap: 4,
     backgroundColor: 'rgba(0,0,0,0.06)',
   },
   devLabel: {
-    fontSize: 10,
+    fontSize: 9,
     fontFamily: 'NotoSans_700Bold',
     color: 'rgba(0,0,0,0.3)',
     letterSpacing: 0.8,
-    marginRight: 4,
+    marginRight: 2,
   },
   devBtn: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 4,
   },
-  devBtnActive: {
-    backgroundColor: 'rgba(101,89,255,0.12)',
-  },
-  devBtnText: {
-    fontSize: 11,
-    color: 'rgba(0,0,0,0.4)',
-    fontFamily: 'NotoSans_400Regular',
-  },
-  devBtnTextActive: {
-    color: T.accent,
-    fontFamily: 'NotoSans_700Bold',
-  },
-  devScreenLabel: {
-    fontSize: 10,
-    color: 'rgba(0,0,0,0.25)',
-    fontFamily: 'NotoSans_400Regular',
-    marginLeft: 4,
-  },
-  screenArea: {
-    flex: 1,
-  },
+  devBtnActive: { backgroundColor: 'rgba(101,89,255,0.14)' },
+  devBtnText: { fontSize: 10, color: 'rgba(0,0,0,0.4)', fontFamily: 'NotoSans_400Regular' },
+  devBtnTextActive: { color: T.accent, fontFamily: 'NotoSans_700Bold' },
+  screenArea: { flex: 1 },
 });

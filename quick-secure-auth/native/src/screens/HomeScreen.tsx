@@ -1,156 +1,208 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { T } from '../tokens';
+import {
+  View, Text, StyleSheet, ScrollView,
+  TouchableOpacity, SafeAreaView, Image, useWindowDimensions,
+} from 'react-native';
+import { StatCard } from './home/StatCard';
+import { AgendaRow } from './home/AgendaRow';
+import { BottomNav } from './home/BottomNav';
 
 interface Props {
-  onFastSwitch: () => void;
+  userName: string;
+  userInitials: string;
+  onSwitchProfile: () => void;
 }
 
-export function HomeScreen({ onFastSwitch }: Props) {
+const ORG = { name: 'Glencore Mining', initials: 'GM' };
+
+const INSPECTIONS = [
+  {
+    id: '1',
+    title: '00101 / Old Mate / 5 Oct 2023 / Asset 5682 / Sydney Cafe',
+    template: 'F10 Food Safety Instructions',
+    updated: 'Updated 12 days ago',
+  },
+  {
+    id: '2',
+    title: '0079 / Old Mate / 4 Oct 2023 / Site Sydney 03 / Sydney Cafe',
+    template: 'Site Audit',
+    updated: 'Updated 13 days ago',
+  },
+];
+
+const TODAY_ITEMS = [
+  { type: 'SCHEDULED INSPECTION', title: 'Food and safety 101', meta: 'Due in 6 hours  ·  Site Name', badge: 'To do',           badgeColor: '#fffae5', badgeTextColor: '#9e4a00' },
+  { type: 'INSPECTION',           title: 'Food and safety 101', meta: 'Due in 6 hours  ·  Site Name', badge: 'Pending approval', badgeColor: '#f2f3f7', badgeTextColor: '#545f70' },
+  { type: 'ACTION',               title: 'Tidy up bottom floor cables', meta: 'Dec 21  ·  High  ·  Site Name', badge: 'To Do',   badgeColor: '#fffae5', badgeTextColor: '#9e4a00' },
+];
+
+function InspectionCard({ title, template, updated, width: screenWidth }: (typeof INSPECTIONS)[0] & { width: number }) {
   return (
-    <View style={styles.container}>
-      {/* Success banner */}
-      <View style={styles.banner}>
-        <Text style={styles.bannerIcon}>✓</Text>
-        <Text style={styles.bannerText}>You're in, John Davies</Text>
+    <View style={[card.wrap, { width: Math.min(280, screenWidth * 0.72) }]}>
+      <Text style={card.type}>INSPECTION</Text>
+      <Text style={card.title} numberOfLines={3}>{title}</Text>
+      <Text style={card.template} numberOfLines={1}>{template}</Text>
+      <Text style={card.meta}>◷  {updated}</Text>
+    </View>
+  );
+}
+
+const card = StyleSheet.create({
+  wrap: {
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#dbe0eb',
+    borderRadius: 12,
+    padding: 16,
+  },
+  type: { fontSize: 10, fontFamily: 'NotoSans_700Bold', color: '#4740d4', letterSpacing: 1, marginBottom: 6 },
+  title: { fontSize: 15, fontFamily: 'NotoSans_400Regular', color: '#1f2533', lineHeight: 22, marginBottom: 4 },
+  template: { fontSize: 12, fontFamily: 'NotoSans_400Regular', color: '#545f70', marginBottom: 12 },
+  meta: { fontSize: 12, fontFamily: 'NotoSans_400Regular', color: '#545f70' },
+});
+
+function OrgHeader({ userInitials, onSwitchProfile }: { userInitials: string; onSwitchProfile: () => void }) {
+  return (
+    <View style={org.row}>
+      <View style={org.left}>
+        <View style={org.logo}>
+          <Text style={org.logoText}>{ORG.initials}</Text>
+        </View>
+        <Text style={org.name}>{ORG.name}</Text>
+        <Text style={org.chevron}>⌄</Text>
       </View>
-
-      {/* Logo */}
-      <View style={styles.logoArea}>
-        <Text style={styles.logoText}>SafetyCulture</Text>
-        <View style={styles.logoUnderline} />
-      </View>
-
-      <Text style={styles.welcomeText}>
-        Welcome back. You're signed in to{'\n'}
-        <Text style={styles.orgBold}>Glencore Mining</Text>
-      </Text>
-
-      {/* Placeholder content cards */}
-      <View style={styles.contentRow}>
-        {['Inspections', 'Issues', 'Training'].map((item) => (
-          <View key={item} style={styles.contentCard}>
-            <View style={styles.contentIcon} />
-            <Text style={styles.contentLabel}>{item}</Text>
+      <View style={org.right}>
+        <Image source={{ uri: 'https://www.figma.com/api/mcp/asset/4636cd08-d198-4a1d-bcd9-5246face0ae3' }} style={org.bellIcon} />
+        <TouchableOpacity style={org.pill} onPress={onSwitchProfile} activeOpacity={0.8}>
+          <View style={org.pillDot}>
+            <Text style={org.pillDotText}>{userInitials}</Text>
           </View>
-        ))}
-      </View>
-
-      {/* Fast user switch */}
-      <View style={styles.switchSection}>
-        <Text style={styles.switchLabel}>Finished? Let the next worker sign in.</Text>
-        <TouchableOpacity style={styles.switchBtn} onPress={onFastSwitch}>
-          <Text style={styles.switchBtnText}>⇄  Fast user switch</Text>
+          <Text style={org.pillLabel}>Switch user</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: T.bg,
-    alignItems: 'center',
-  },
-  banner: {
-    width: '100%',
-    backgroundColor: '#22c55e',
+const org = StyleSheet.create({
+  row: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 16,
-    gap: 10,
+    justifyContent: 'space-between',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: '#ffffff',
   },
-  bannerIcon: {
-    fontSize: 20,
-    color: '#ffffff',
-    fontFamily: 'NotoSans_700Bold',
-  },
-  bannerText: {
-    fontSize: 18,
-    fontFamily: 'NotoSans_700Bold',
-    color: '#ffffff',
-  },
-  logoArea: {
-    alignItems: 'center',
-    marginTop: 48,
-    marginBottom: 12,
-  },
-  logoText: {
-    fontSize: 26,
-    fontFamily: 'NotoSans_700Bold',
-    color: T.textDefault,
-    letterSpacing: -0.5,
-  },
-  logoUnderline: {
-    marginTop: 3,
-    width: 40,
-    height: 3,
-    borderRadius: 2,
-    backgroundColor: T.accent,
-  },
-  welcomeText: {
-    fontSize: 17,
-    fontFamily: 'NotoSans_400Regular',
-    color: T.textWeaker,
-    textAlign: 'center',
-    marginBottom: 48,
-    lineHeight: 26,
-  },
-  orgBold: {
-    fontFamily: 'NotoSans_700Bold',
-    color: T.textWeak,
-  },
-  contentRow: {
+  left: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  logo: { width: 30, height: 30, borderRadius: 8, backgroundColor: '#f1f1f1', alignItems: 'center', justifyContent: 'center' },
+  logoText: { fontSize: 12, fontFamily: 'NotoSans_700Bold', color: '#1f2533' },
+  name: { fontSize: 17, fontFamily: 'NotoSans_700Bold', color: '#1f2533' },
+  chevron: { fontSize: 14, color: '#545f70' },
+  right: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  bellIcon: { width: 24, height: 24 },
+  pill: {
     flexDirection: 'row',
-    gap: 20,
-    marginBottom: 64,
-  },
-  contentCard: {
-    width: 120,
-    height: 120,
-    backgroundColor: T.surface,
-    borderRadius: 16,
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 4,
+    gap: 6,
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#dbe0eb',
+    borderRadius: 100,
+    paddingVertical: 4,
+    paddingLeft: 4,
+    paddingRight: 10,
   },
-  contentIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 10,
-    backgroundColor: T.bg,
+  pillDot: { width: 24, height: 24, borderRadius: 12, backgroundColor: '#6559ff', alignItems: 'center', justifyContent: 'center' },
+  pillDotText: { fontSize: 10, fontFamily: 'NotoSans_700Bold', color: '#ffffff' },
+  pillLabel: { fontSize: 13, fontFamily: 'NotoSans_700Bold', color: '#1f2533' },
+});
+
+export function HomeScreen({ userName, userInitials, onSwitchProfile }: Props) {
+  const { width } = useWindowDimensions();
+  const hPad = width < 600 ? 16 : 36;
+  return (
+    <View style={s.container}>
+      <SafeAreaView style={s.header}>
+        <OrgHeader userInitials={userInitials} onSwitchProfile={onSwitchProfile} />
+        <View style={s.headerBorder} />
+      </SafeAreaView>
+
+      <ScrollView style={s.scroll} contentContainerStyle={[s.scrollContent, { paddingHorizontal: hPad }]} showsVerticalScrollIndicator={false}>
+
+        {/* Stat cards */}
+        <View style={s.statRow}>
+          <StatCard label="Training" count={4} icon="training" />
+          <StatCard label="Issues" count={3} icon="issues" />
+        </View>
+
+        {/* In progress */}
+        <View style={s.section}>
+          <View style={s.sectionHead}>
+            <View style={s.sectionTitleRow}>
+              <Text style={s.sectionTitle}>In progress</Text>
+              <View style={s.badge}><Text style={s.badgeText}>10</Text></View>
+            </View>
+            <TouchableOpacity><Text style={s.viewAll}>View all</Text></TouchableOpacity>
+          </View>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={[s.hScroll, { paddingRight: hPad }]}>
+            {INSPECTIONS.map(item => <InspectionCard key={item.id} {...item} width={width} />)}
+          </ScrollView>
+        </View>
+
+        {/* Agenda */}
+        <View style={s.section}>
+          <View style={s.sectionHead}>
+            <Text style={s.sectionTitle}>Agenda</Text>
+            <TouchableOpacity><Text style={s.viewAll}>View all</Text></TouchableOpacity>
+          </View>
+          <View style={s.tabs}>
+            {['All', 'Inspections', 'Actions'].map((t, i) => (
+              <View key={t} style={[s.tab, i === 0 && s.tabActive]}>
+                <Text style={[s.tabText, i === 0 && s.tabTextActive]}>{t}</Text>
+              </View>
+            ))}
+          </View>
+          <View style={s.agendaList}>
+            <AgendaRow label="Overdue"  count={0} variant="negative" />
+            <AgendaRow label="Today"    count={3} variant="warning" expanded items={TODAY_ITEMS} />
+            <AgendaRow label="Upcoming" count={0} variant="accent" />
+            <AgendaRow label="No date"  count={0} variant="neutral" />
+          </View>
+        </View>
+
+      </ScrollView>
+
+      <BottomNav />
+    </View>
+  );
+}
+
+const s = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#e9edf6' },
+  header: { backgroundColor: '#ffffff' },
+  headerBorder: { height: 1, backgroundColor: '#dbe0eb' },
+  scroll: { flex: 1 },
+  scrollContent: { paddingTop: 24, paddingBottom: 32, gap: 20 },
+  statRow: { flexDirection: 'row', gap: 8 },
+  section: { gap: 12 },
+  sectionHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  sectionTitleRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  sectionTitle: { fontSize: 18, fontFamily: 'NotoSans_700Bold', color: '#1f2533', lineHeight: 24 },
+  badge: { backgroundColor: '#6559ff', borderRadius: 10, paddingHorizontal: 7, paddingVertical: 2 },
+  badgeText: { fontSize: 12, fontFamily: 'NotoSans_700Bold', color: '#ffffff' },
+  viewAll: { fontSize: 14, fontFamily: 'NotoSans_400Regular', color: '#4740d4' },
+  hScroll: { gap: 8 },
+  tabs: { flexDirection: 'row', gap: 8 },
+  tab: {
+    borderWidth: 1,
+    borderColor: '#dbe0eb',
+    borderRadius: 100,
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    backgroundColor: '#ffffff',
   },
-  contentLabel: {
-    fontSize: 13,
-    fontFamily: 'NotoSans_700Bold',
-    color: T.textWeak,
-  },
-  switchSection: {
-    alignItems: 'center',
-    gap: 14,
-  },
-  switchLabel: {
-    fontSize: 15,
-    fontFamily: 'NotoSans_400Regular',
-    color: T.textWeaker,
-  },
-  switchBtn: {
-    backgroundColor: T.accent,
-    borderRadius: 14,
-    paddingVertical: 18,
-    paddingHorizontal: 40,
-  },
-  switchBtnText: {
-    fontSize: 17,
-    fontFamily: 'NotoSans_700Bold',
-    color: '#ffffff',
-    letterSpacing: 0.2,
-  },
+  tabActive: { borderColor: '#6559ff', backgroundColor: '#ecedfe' },
+  tabText: { fontSize: 13, fontFamily: 'NotoSans_400Regular', color: '#545f70' },
+  tabTextActive: { fontFamily: 'NotoSans_700Bold', color: '#4740d4' },
+  agendaList: { gap: 8 },
 });
