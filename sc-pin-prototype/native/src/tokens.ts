@@ -1,0 +1,20 @@
+export const T = {
+  bg: '#e9edf6',
+  surface: '#ffffff',
+  textDefault: '#1f2533',
+  textWeak: '#3f495a',
+  textWeaker: '#545f70',
+  textPlaceholder: '#bfc6d4',
+  accent: '#6559ff',
+  accentHover: '#5044e4',
+  accentText: '#4740d4',
+  negative: '#cc3340',
+  border: '#bfc6d4',
+  shadow: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 14 },
+    shadowOpacity: 0.16,
+    shadowRadius: 28,
+    elevation: 8,
+  },
+} as const;
