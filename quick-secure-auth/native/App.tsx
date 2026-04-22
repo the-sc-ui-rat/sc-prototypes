@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import {
   useFonts,
@@ -9,19 +9,15 @@ import {
 import { T } from './src/tokens';
 import { IdleScreen } from './src/screens/IdleScreen';
 import { IdleAfterAuthScreen, LastUser } from './src/screens/IdleAfterAuthScreen';
-import { FaceScanScreen, FallbackMethod, ScanUser } from './src/screens/FaceScanScreen';
+import { FaceScanScreen, ScanUser } from './src/screens/FaceScanScreen';
 import { AuthenticatingScreen } from './src/screens/AuthenticatingScreen';
 import { IdentityConfirmScreen, ConfirmedUser } from './src/screens/IdentityConfirmScreen';
 import { HomeScreen } from './src/screens/HomeScreen';
+import { TransitionToHome } from './src/screens/TransitionToHome';
 import { QRScanScreen } from './src/screens/QRScanScreen';
 import { PasswordLoginScreen } from './src/screens/PasswordLoginScreen';
-
-// ── Auth config — mirrors the admin prototype default ────────────────────────
-const AUTH_CONFIG = {
-  primary: 'face' as const,
-  fallbacks: ['qr', 'password'] as FallbackMethod[],
-  inactivitySeconds: 15,
-};
+import { NFCAuthScreen } from './src/screens/NFCAuthScreen';
+import { RFIDAuthScreen } from './src/screens/RFIDAuthScreen';
 
 // ── Mock FLW worker ───────────────────────────────────────────────────────────
 const MOCK_WORKER: ConfirmedUser & LastUser & ScanUser = {
@@ -31,25 +27,36 @@ const MOCK_WORKER: ConfirmedUser & LastUser & ScanUser = {
   org: 'Glencore Mining',
 };
 
-type Screen = 'idle' | 'idle-after-auth' | 'face-scan' | 'qr-scan' | 'password-login' | 'authenticating' | 'confirm' | 'home';
+type Screen = 'idle' | 'idle-after-auth' | 'face-scan' | 'qr-scan' | 'password-login' | 'nfc-auth' | 'rfid-auth' | 'authenticating' | 'transitioning-to-home' | 'confirm' | 'home';
 
 export default function App() {
   const [fontsLoaded] = useFonts({ NotoSans_400Regular, NotoSans_700Bold });
   const [screen, setScreen] = useState<Screen>('idle');
   const [lastUser, setLastUser] = useState<LastUser | null>(null);
+  const [avatarCenter, setAvatarCenter] = useState<{ x: number; y: number } | null>(null);
+  const [screenOffsetY, setScreenOffsetY] = useState(0);
+  const screenAreaRef = useRef<View>(null);
 
   if (!fontsLoaded) return <View style={{ flex: 1, backgroundColor: T.bg }} />;
 
   // ── Navigation ──────────────────────────────────────────────────────────────
   const goToFaceScan = () => setScreen('face-scan');
   const handleAuthenticated = () => setScreen('authenticating');
-  const handleSwitchProfile = () => setScreen('face-scan');
+  const handleSwitchProfile = () => setScreen('idle');
 
   // ── Screen renderer ─────────────────────────────────────────────────────────
   const renderScreen = () => {
     switch (screen) {
       case 'idle':
-        return <IdleScreen onLogin={goToFaceScan} />;
+        return (
+          <IdleScreen
+            onFaceScan={() => setScreen('face-scan')}
+            onQRScan={() => setScreen('qr-scan')}
+            onPassword={() => setScreen('password-login')}
+            onNFC={() => setScreen('nfc-auth')}
+            onRFID={() => setScreen('rfid-auth')}
+          />
+        );
 
       case 'idle-after-auth':
         return (
@@ -63,13 +70,9 @@ export default function App() {
       case 'face-scan':
         return (
           <FaceScanScreen
-            fallbacks={AUTH_CONFIG.fallbacks}
             user={MOCK_WORKER}
             onAuthenticated={handleAuthenticated}
-            onFallback={(method) => {
-            if (method === 'qr') setScreen('qr-scan');
-            if (method === 'password') setScreen('password-login');
-          }}
+            onBack={() => setScreen('idle')}
           />
         );
 
@@ -77,7 +80,7 @@ export default function App() {
         return (
           <PasswordLoginScreen
             onAuthenticated={() => setScreen('authenticating')}
-            onBack={() => setScreen('face-scan')}
+            onBack={() => setScreen('idle')}
           />
         );
 
@@ -85,12 +88,50 @@ export default function App() {
         return (
           <QRScanScreen
             onScanned={() => setScreen('authenticating')}
-            onBack={() => setScreen('face-scan')}
+            onBack={() => setScreen('idle')}
+          />
+        );
+
+      case 'nfc-auth':
+        return (
+          <NFCAuthScreen
+            onComplete={() => setScreen('authenticating')}
+            onBack={() => setScreen('idle')}
+          />
+        );
+
+      case 'rfid-auth':
+        return (
+          <RFIDAuthScreen
+            onComplete={() => setScreen('authenticating')}
+            onBack={() => setScreen('idle')}
           />
         );
 
       case 'authenticating':
-        return <AuthenticatingScreen onComplete={() => { setLastUser(MOCK_WORKER); setScreen('home'); }} />;
+        return (
+          <AuthenticatingScreen
+            userName={MOCK_WORKER.name}
+            userInitials={MOCK_WORKER.initials}
+            onComplete={(center) => {
+              setLastUser(MOCK_WORKER);
+              setAvatarCenter(center);
+              setScreen('transitioning-to-home');
+            }}
+          />
+        );
+
+      case 'transitioning-to-home':
+        return avatarCenter ? (
+          <TransitionToHome
+            avatarCenter={avatarCenter}
+            screenOffsetY={screenOffsetY}
+            userName={MOCK_WORKER.name}
+            userInitials={MOCK_WORKER.initials}
+            onSwitchProfile={handleSwitchProfile}
+            onComplete={() => setScreen('home')}
+          />
+        ) : null;
 
       case 'confirm':
         return (
@@ -117,9 +158,10 @@ export default function App() {
     { label: 'scan',       screen: 'face-scan' },
     { label: 'qr',         screen: 'qr-scan' },
     { label: 'password',   screen: 'password-login' },
+    { label: 'nfc',        screen: 'nfc-auth' },
+    { label: 'rfid',       screen: 'rfid-auth' },
     { label: 'authing',    screen: 'authenticating' },
     { label: 'home',       screen: 'home' },
-    { label: 'idle+user',  screen: 'idle-after-auth' },
   ];
 
   const DevBar = () => (
@@ -147,7 +189,13 @@ export default function App() {
       <SafeAreaView style={styles.safeTop}>
         <DevBar />
       </SafeAreaView>
-      <View style={styles.screenArea}>{renderScreen()}</View>
+      <View
+        ref={screenAreaRef}
+        style={styles.screenArea}
+        onLayout={() => screenAreaRef.current?.measureInWindow((_, y) => setScreenOffsetY(y))}
+      >
+        {renderScreen()}
+      </View>
     </View>
   );
 }

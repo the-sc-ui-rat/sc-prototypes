@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -8,9 +8,12 @@ import Animated, {
   withTiming,
   withDelay,
 } from 'react-native-reanimated';
+import { T } from '../tokens';
 
 interface Props {
-  onComplete: () => void;
+  userName: string;
+  userInitials: string;
+  onComplete: (avatarCenter: { x: number; y: number }) => void;
 }
 
 function Dot({ delay }: { delay: number }) {
@@ -30,29 +33,43 @@ function Dot({ delay }: { delay: number }) {
     );
   }, []);
 
-  const style = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-  }));
-
-  return <Animated.View style={[styles.dot, style]} />;
+  return <Animated.View style={[styles.dot, useAnimatedStyle(() => ({ opacity: opacity.value }))]} />;
 }
 
-export function AuthenticatingScreen({ onComplete }: Props) {
+export function AuthenticatingScreen({ userName, userInitials, onComplete }: Props) {
+  const avatarRef = useRef<View>(null);
+
   useEffect(() => {
-    const timer = setTimeout(onComplete, 1400);
+    const timer = setTimeout(() => {
+      avatarRef.current?.measureInWindow((x, y, w, h) => {
+        onComplete({ x: x + w / 2, y: y + h / 2 });
+      });
+    }, 2200);
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.logo}>SafetyCulture</Text>
-      <View style={styles.underline} />
-      <View style={styles.dotsRow}>
-        <Dot delay={0} />
-        <Dot delay={180} />
-        <Dot delay={360} />
+      <View style={styles.logoGroup}>
+        <Text style={styles.logo}>SafetyCulture</Text>
+        <View style={styles.underline} />
       </View>
-      <Text style={styles.label}>Signing you in…</Text>
+
+      <View style={styles.welcomeGroup}>
+        <Text style={styles.welcomeText}>Welcome back {userName}</Text>
+        <View ref={avatarRef} style={styles.avatar}>
+          <Text style={styles.avatarText}>{userInitials}</Text>
+        </View>
+      </View>
+
+      <View style={styles.spinnerGroup}>
+        <View style={styles.dotsRow}>
+          <Dot delay={0} />
+          <Dot delay={180} />
+          <Dot delay={360} />
+        </View>
+        <Text style={styles.label}>Signing you in...</Text>
+      </View>
     </View>
   );
 }
@@ -60,39 +77,69 @@ export function AuthenticatingScreen({ onComplete }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e9edf6',
+    backgroundColor: T.bg,
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 80,
+  },
+  logoGroup: {
+    alignItems: 'center',
+    gap: 6,
   },
   logo: {
-    fontSize: 24,
+    fontSize: 34,
     fontFamily: 'NotoSans_700Bold',
-    color: '#1f2533',
-    letterSpacing: -0.3,
+    color: T.textDefault,
+    letterSpacing: -1,
   },
   underline: {
-    marginTop: 4,
     width: 36,
     height: 2.5,
     borderRadius: 2,
-    backgroundColor: '#6559ff',
-    marginBottom: 48,
+    backgroundColor: T.accent,
+  },
+  welcomeGroup: {
+    alignItems: 'center',
+    gap: 16,
+  },
+  welcomeText: {
+    fontSize: 16,
+    fontFamily: 'NotoSans_400Regular',
+    color: T.textDefault,
+    textAlign: 'center',
+  },
+  avatar: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: T.accent,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarText: {
+    fontSize: 40,
+    fontFamily: 'NotoSans_700Bold',
+    color: '#ffffff',
+  },
+  spinnerGroup: {
+    alignItems: 'center',
+    gap: 16,
   },
   dotsRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    marginBottom: 20,
   },
   dot: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#6559ff',
+    backgroundColor: T.accent,
   },
   label: {
-    fontSize: 15,
+    fontSize: 16,
     fontFamily: 'NotoSans_400Regular',
-    color: 'rgba(31,37,51,0.45)',
+    color: T.textWeaker,
+    textAlign: 'center',
   },
 });

@@ -155,25 +155,25 @@ const styles = StyleSheet.create({
     top: 0, left: 0,
     borderTopWidth: BRACKET_THICKNESS,
     borderLeftWidth: BRACKET_THICKNESS,
-    borderTopLeftRadius: 4,
+    borderTopLeftRadius: 16,
   },
   bracketTR: {
     top: 0, right: 0,
     borderTopWidth: BRACKET_THICKNESS,
     borderRightWidth: BRACKET_THICKNESS,
-    borderTopRightRadius: 4,
+    borderTopRightRadius: 16,
   },
   bracketBL: {
     bottom: 0, left: 0,
     borderBottomWidth: BRACKET_THICKNESS,
     borderLeftWidth: BRACKET_THICKNESS,
-    borderBottomLeftRadius: 4,
+    borderBottomLeftRadius: 16,
   },
   bracketBR: {
     bottom: 0, right: 0,
     borderBottomWidth: BRACKET_THICKNESS,
     borderRightWidth: BRACKET_THICKNESS,
-    borderBottomRightRadius: 4,
+    borderBottomRightRadius: 16,
   },
 
   hint: {

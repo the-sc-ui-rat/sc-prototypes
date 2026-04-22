@@ -40,13 +40,6 @@ function CopyIcon({ color }: { color: string }) {
   );
 }
 
-function BackIcon({ color }: { color: string }) {
-  return (
-    <Svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <Path d="M19 12H5M12 5l-7 7 7 7" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </Svg>
-  );
-}
 
 export function PasswordLoginScreen({ onAuthenticated, onBack }: Props) {
   const { width } = useWindowDimensions();
@@ -61,11 +54,20 @@ export function PasswordLoginScreen({ onAuthenticated, onBack }: Props) {
     if (username.trim()) setStep('password');
   };
 
+  const handleBack = () => {
+    if (step === 'password') setStep('username');
+    else onBack();
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.root}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
+      <TouchableOpacity style={styles.backBtn} onPress={handleBack} activeOpacity={0.7}>
+        <Text style={styles.backBtnText}>← Back</Text>
+      </TouchableOpacity>
+
       <ScrollView
         contentContainerStyle={[styles.scroll, { paddingHorizontal: scrollPad }]}
         keyboardShouldPersistTaps="handled"
@@ -111,12 +113,7 @@ export function PasswordLoginScreen({ onAuthenticated, onBack }: Props) {
             </>
           ) : (
             <>
-              <View style={styles.titleRow}>
-                <TouchableOpacity onPress={() => setStep('username')} activeOpacity={0.7} style={styles.backIconBtn}>
-                  <BackIcon color="#6559ff" />
-                </TouchableOpacity>
-                <Text style={styles.title}>Log in</Text>
-              </View>
+              <Text style={styles.title}>Log in</Text>
 
               <Text style={styles.subtitle}>
                 Log in to <Text style={styles.subtitleBold}>{ORG_NAME}</Text> as{' '}
@@ -186,6 +183,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#e9edf6',
   },
+  backBtn: {
+    position: 'absolute',
+    top: 52,
+    left: 32,
+    zIndex: 10,
+  },
+  backBtnText: {
+    fontSize: 15,
+    color: '#4740d4',
+    fontFamily: 'NotoSans_400Regular',
+  },
   scroll: {
     flexGrow: 1,
     alignItems: 'center',
@@ -213,9 +221,6 @@ const styles = StyleSheet.create({
     gap: 20,
   },
 
-  // Title row
-  titleRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  backIconBtn: { padding: 2 },
   title: { fontSize: 24, fontFamily: 'NotoSans_700Bold', color: '#1f2533' },
 
   // Subtitle

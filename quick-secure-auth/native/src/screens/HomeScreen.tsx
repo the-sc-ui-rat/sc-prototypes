@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
   View, Text, StyleSheet, ScrollView,
   TouchableOpacity, SafeAreaView, Image, useWindowDimensions,
@@ -11,6 +11,7 @@ interface Props {
   userName: string;
   userInitials: string;
   onSwitchProfile: () => void;
+  onPillDotMeasured?: (x: number, y: number, w: number, h: number) => void;
 }
 
 const ORG = { name: 'Glencore Mining', initials: 'GM' };
@@ -61,7 +62,33 @@ const card = StyleSheet.create({
   meta: { fontSize: 12, fontFamily: 'NotoSans_400Regular', color: '#545f70' },
 });
 
-function OrgHeader({ userInitials, onSwitchProfile }: { userInitials: string; onSwitchProfile: () => void }) {
+function OrgHeader({
+  userInitials,
+  onSwitchProfile,
+  onPillDotMeasured,
+}: {
+  userInitials: string;
+  onSwitchProfile: () => void;
+  onPillDotMeasured?: (x: number, y: number, w: number, h: number) => void;
+}) {
+  const pillDotRef = useRef<View>(null);
+
+  useEffect(() => {
+    if (!onPillDotMeasured) return;
+    let retryTimer: ReturnType<typeof setTimeout>;
+    const measure = () => {
+      pillDotRef.current?.measureInWindow((x, y, w, h) => {
+        if (w > 0) {
+          onPillDotMeasured(x, y, w, h);
+        } else {
+          retryTimer = setTimeout(measure, 16);
+        }
+      });
+    };
+    const timer = setTimeout(measure, 32);
+    return () => { clearTimeout(timer); clearTimeout(retryTimer); };
+  }, [onPillDotMeasured]);
+
   return (
     <View style={org.row}>
       <View style={org.left}>
@@ -74,7 +101,7 @@ function OrgHeader({ userInitials, onSwitchProfile }: { userInitials: string; on
       <View style={org.right}>
         <Image source={{ uri: 'https://www.figma.com/api/mcp/asset/4636cd08-d198-4a1d-bcd9-5246face0ae3' }} style={org.bellIcon} />
         <TouchableOpacity style={org.pill} onPress={onSwitchProfile} activeOpacity={0.8}>
-          <View style={org.pillDot}>
+          <View ref={pillDotRef} style={org.pillDot}>
             <Text style={org.pillDotText}>{userInitials}</Text>
           </View>
           <Text style={org.pillLabel}>Switch user</Text>
@@ -117,13 +144,13 @@ const org = StyleSheet.create({
   pillLabel: { fontSize: 13, fontFamily: 'NotoSans_700Bold', color: '#1f2533' },
 });
 
-export function HomeScreen({ userName, userInitials, onSwitchProfile }: Props) {
+export function HomeScreen({ userName, userInitials, onSwitchProfile, onPillDotMeasured }: Props) {
   const { width } = useWindowDimensions();
   const hPad = width < 600 ? 16 : 36;
   return (
     <View style={s.container}>
       <SafeAreaView style={s.header}>
-        <OrgHeader userInitials={userInitials} onSwitchProfile={onSwitchProfile} />
+        <OrgHeader userInitials={userInitials} onSwitchProfile={onSwitchProfile} onPillDotMeasured={onPillDotMeasured} />
         <View style={s.headerBorder} />
       </SafeAreaView>
 
