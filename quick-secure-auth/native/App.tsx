@@ -19,11 +19,18 @@ import { PasswordLoginScreen } from './src/screens/PasswordLoginScreen';
 import { NFCAuthScreen } from './src/screens/NFCAuthScreen';
 import { RFIDAuthScreen } from './src/screens/RFIDAuthScreen';
 
-// ── Mock FLW worker ───────────────────────────────────────────────────────────
-const MOCK_WORKER: ConfirmedUser & LastUser & ScanUser = {
+// ── Mock FLW workers ──────────────────────────────────────────────────────────
+const OLD_MATE: ConfirmedUser & LastUser & ScanUser = {
   name: 'Old Mate',
   email: 'old.mate@safetyculture.io',
   initials: 'OM',
+  org: 'Glencore Mining',
+};
+
+const NEW_MATE: ConfirmedUser & LastUser & ScanUser = {
+  name: 'New Mate',
+  email: 'new.mate@safetyculture.io',
+  initials: 'NM',
   org: 'Glencore Mining',
 };
 
@@ -32,6 +39,7 @@ type Screen = 'idle' | 'idle-after-auth' | 'face-scan' | 'qr-scan' | 'password-l
 export default function App() {
   const [fontsLoaded] = useFonts({ NotoSans_400Regular, NotoSans_700Bold });
   const [screen, setScreen] = useState<Screen>('idle');
+  const [activeUser, setActiveUser] = useState<ConfirmedUser & LastUser & ScanUser>(OLD_MATE);
   const [lastUser, setLastUser] = useState<LastUser | null>(null);
   const [avatarCenter, setAvatarCenter] = useState<{ x: number; y: number } | null>(null);
   const [screenOffsetY, setScreenOffsetY] = useState(0);
@@ -42,7 +50,10 @@ export default function App() {
   // ── Navigation ──────────────────────────────────────────────────────────────
   const goToFaceScan = () => setScreen('face-scan');
   const handleAuthenticated = () => setScreen('authenticating');
-  const handleSwitchProfile = () => setScreen('idle');
+  const handleSwitchProfile = () => {
+    setActiveUser(u => u === OLD_MATE ? NEW_MATE : OLD_MATE);
+    setScreen('idle');
+  };
 
   // ── Screen renderer ─────────────────────────────────────────────────────────
   const renderScreen = () => {
@@ -70,7 +81,7 @@ export default function App() {
       case 'face-scan':
         return (
           <FaceScanScreen
-            user={MOCK_WORKER}
+            user={activeUser}
             onAuthenticated={handleAuthenticated}
             onBack={() => setScreen('idle')}
           />
@@ -111,10 +122,10 @@ export default function App() {
       case 'authenticating':
         return (
           <AuthenticatingScreen
-            userName={MOCK_WORKER.name}
-            userInitials={MOCK_WORKER.initials}
+            userName={activeUser.name}
+            userInitials={activeUser.initials}
             onComplete={(center) => {
-              setLastUser(MOCK_WORKER);
+              setLastUser(activeUser);
               setAvatarCenter(center);
               setScreen('transitioning-to-home');
             }}
@@ -126,8 +137,8 @@ export default function App() {
           <TransitionToHome
             avatarCenter={avatarCenter}
             screenOffsetY={screenOffsetY}
-            userName={MOCK_WORKER.name}
-            userInitials={MOCK_WORKER.initials}
+            userName={activeUser.name}
+            userInitials={activeUser.initials}
             onSwitchProfile={handleSwitchProfile}
             onComplete={() => setScreen('home')}
           />
@@ -136,16 +147,16 @@ export default function App() {
       case 'confirm':
         return (
           <IdentityConfirmScreen
-            user={MOCK_WORKER}
-            onComplete={() => { setLastUser(MOCK_WORKER); setScreen('home'); }}
+            user={activeUser}
+            onComplete={() => { setLastUser(activeUser); setScreen('home'); }}
           />
         );
 
       case 'home':
         return (
           <HomeScreen
-            userName={MOCK_WORKER.name}
-            userInitials={MOCK_WORKER.initials}
+            userName={activeUser.name}
+            userInitials={activeUser.initials}
             onSwitchProfile={handleSwitchProfile}
           />
         );
@@ -171,7 +182,7 @@ export default function App() {
         <TouchableOpacity
           key={s}
           onPress={() => {
-            if (s === 'idle-after-auth') setLastUser(MOCK_WORKER);
+            if (s === 'idle-after-auth') setLastUser(activeUser);
             setScreen(s);
           }}
           style={[styles.devBtn, screen === s && styles.devBtnActive]}

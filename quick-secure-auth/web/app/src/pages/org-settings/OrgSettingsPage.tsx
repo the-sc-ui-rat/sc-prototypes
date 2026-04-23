@@ -5,14 +5,16 @@ import { Toaster, toast } from "sonner"
 import { LoginOptionItem } from "./LoginOptionItem"
 import { PasswordlessConfig } from "./PasswordlessConfig"
 import { EmaillessConfig } from "./EmaillessConfig"
-import { DEFAULT_AUTH_CONFIG, ORG_LOGIN_URL } from "./config"
-import type { AuthConfig } from "./config"
+import { PinConfig } from "./PinConfig"
+import { DEFAULT_AUTH_CONFIG, DEFAULT_PIN_CONFIG, ORG_LOGIN_URL } from "./config"
+import type { AuthConfig, PinConfig as PinConfigType } from "./config"
 
-type Feature = "passwordless" | "emailless"
+type Feature = "passwordless" | "emailless" | "pin"
 
 const LABELS: Record<Feature, string> = {
   passwordless: "Passwordless login",
   emailless: "Log in without email",
+  pin: "Mobile app PIN authentication",
 }
 
 const ENABLE_BODY =
@@ -26,9 +28,12 @@ export function OrgSettingsPage() {
   const [activeTab, setActiveTab] = useState("Login")
   const [passwordlessEnabled, setPasswordlessEnabled] = useState(false)
   const [emaillessEnabled, setEmaillessEnabled] = useState(false)
+  const [pinEnabled, setPinEnabled] = useState(false)
   const [authConfig, setAuthConfig] = useState<AuthConfig>(DEFAULT_AUTH_CONFIG)
+  const [pinConfig, setPinConfig] = useState<PinConfigType>(DEFAULT_PIN_CONFIG)
   const [passwordlessExpanded, setPasswordlessExpanded] = useState(false)
   const [emaillessExpanded, setEmaillessExpanded] = useState(false)
+  const [pinExpanded, setPinExpanded] = useState(false)
   const [bannerDismissed, setBannerDismissed] = useState(false)
   const [pending, setPending] = useState<{ feature: Feature; enabling: boolean } | null>(null)
 
@@ -38,16 +43,20 @@ export function OrgSettingsPage() {
   const confirmToggle = () => {
     if (!pending) return
     const { feature, enabling } = pending
-    const snap = { passwordlessEnabled, emaillessEnabled, passwordlessExpanded, emaillessExpanded }
+    const snap = { passwordlessEnabled, emaillessEnabled, pinEnabled, passwordlessExpanded, emaillessExpanded, pinExpanded }
 
     if (feature === "passwordless") {
       setPasswordlessEnabled(enabling)
       if (enabling) setPasswordlessExpanded(true)
       else if (passwordlessExpanded) setPasswordlessExpanded(false)
-    } else {
+    } else if (feature === "emailless") {
       setEmaillessEnabled(enabling)
       if (enabling) setEmaillessExpanded(true)
       else if (emaillessExpanded) setEmaillessExpanded(false)
+    } else {
+      setPinEnabled(enabling)
+      if (enabling) setPinExpanded(true)
+      else if (pinExpanded) setPinExpanded(false)
     }
     setPending(null)
 
@@ -57,15 +66,13 @@ export function OrgSettingsPage() {
     })
   }
 
-  const revert = (snap: typeof pending extends null ? never : {
-    passwordlessEnabled: boolean; emaillessEnabled: boolean
-    passwordlessExpanded: boolean; emaillessExpanded: boolean
-  }) => {
-    if (!snap) return
+  const revert = (snap: { passwordlessEnabled: boolean; emaillessEnabled: boolean; pinEnabled: boolean; passwordlessExpanded: boolean; emaillessExpanded: boolean; pinExpanded: boolean }) => {
     setPasswordlessEnabled(snap.passwordlessEnabled)
     setEmaillessEnabled(snap.emaillessEnabled)
+    setPinEnabled(snap.pinEnabled)
     setPasswordlessExpanded(snap.passwordlessExpanded)
     setEmaillessExpanded(snap.emaillessExpanded)
+    setPinExpanded(snap.pinExpanded)
     toast.warning("Change reverted", { icon: "↩" })
   }
 
@@ -148,14 +155,19 @@ export function OrgSettingsPage() {
         </LoginOptionItem>
 
         <LoginOptionItem
-          title="Mobile app pin authentication"
-          description="Require users to set and enter a PIN to access the mobile app."
-          expanded={false}
-          onToggleExpand={() => {}}
-          enabled={false}
-          onToggleEnabled={() => {}}
-          disabled
-        />
+          title="Mobile app PIN authentication"
+          description="Require users to set and enter a PIN when switching profiles on a shared device. PINs are stored securely on-device."
+          expanded={pinExpanded}
+          onToggleExpand={() => setPinExpanded((p) => !p)}
+          enabled={pinEnabled}
+          onToggleEnabled={() => requestToggle("pin", pinEnabled)}
+        >
+          <PinConfig
+            config={pinConfig}
+            onConfigChange={setPinConfig}
+            disabled={!pinEnabled}
+          />
+        </LoginOptionItem>
       </div>
 
       <p className="mt-4 body-xs text-surface-weaker">
@@ -170,7 +182,7 @@ export function OrgSettingsPage() {
             <AlertDialog.Backdrop />
             <AlertDialog.Popup>
               <AlertDialog.Title>
-                {pending.enabling ? "Enable" : "Disable"} {LABELS[pending.feature]}?
+                {pending.enabling ? "Enable" : "Disable"} {LABELS[pending.feature].toLowerCase()}?
               </AlertDialog.Title>
               <AlertDialog.Description>
                 {pending.enabling ? ENABLE_BODY : DISABLE_BODY}

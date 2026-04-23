@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
-  View, Text, StyleSheet, ScrollView, TouchableOpacity,
-  TextInput, useWindowDimensions,
+  View, Text, StyleSheet, ScrollView, TouchableOpacity, Pressable, TextInput, useWindowDimensions,
 } from 'react-native';
 import Svg, { Path, Circle } from 'react-native-svg';
 import { T } from '../tokens';
@@ -34,7 +33,10 @@ function SearchIcon() {
 
 function UserCard({ user, onPress }: { user: StoredUser; onPress: () => void }) {
   return (
-    <View style={card.wrap}>
+    <Pressable
+      style={({ pressed }) => [card.wrap, pressed && card.wrapPressed]}
+      onPress={onPress}
+    >
       <View style={[card.avatar, { backgroundColor: user.accentColor }]}>
         <Text style={card.initials}>{user.initials}</Text>
       </View>
@@ -42,23 +44,26 @@ function UserCard({ user, onPress }: { user: StoredUser; onPress: () => void }) 
         <Text style={card.name} numberOfLines={1}>{user.name}</Text>
         <Text style={card.email} numberOfLines={1}>{user.email}</Text>
       </View>
-      <TouchableOpacity style={card.btn} onPress={onPress} activeOpacity={0.85}>
+      <View style={card.btn}>
         <Text style={card.btnText}>Log in as {user.name.split(' ')[0]}</Text>
-      </TouchableOpacity>
-    </View>
+      </View>
+    </Pressable>
   );
 }
 
 const card = StyleSheet.create({
   wrap: {
     width: 176,
-    backgroundColor: T.surface,
+    backgroundColor: '#ffffff',
     borderWidth: 1,
-    borderColor: T.border,
+    borderColor: '#BFC6D4',
     borderRadius: 12,
     padding: 12,
     alignItems: 'center',
     gap: 16,
+  },
+  wrapPressed: {
+    opacity: 0.75,
   },
   avatar: {
     width: 72,
@@ -82,14 +87,16 @@ const card = StyleSheet.create({
   name: {
     fontSize: 16,
     fontFamily: 'NotoSans_700Bold',
-    color: T.textDefault,
+    color: '#1f2533',
     textAlign: 'center',
+    lineHeight: 24,
   },
   email: {
     fontSize: 14,
     fontFamily: 'NotoSans_400Regular',
-    color: T.textWeaker,
+    color: '#545f70',
     textAlign: 'center',
+    lineHeight: 20,
   },
   btn: {
     width: '100%',
@@ -110,7 +117,7 @@ const card = StyleSheet.create({
 export function SwitchUserScreen({ users, onSelectUser, onLoginViaEmail }: Props) {
   const { width } = useWindowDimensions();
   const hPad = Math.max(24, (width - CONTENT_MAX) / 2);
-  const illustrationSize = Math.min(220, Math.round((width - hPad * 2) * 0.45));
+  const illustrationSize = Math.min(220, Math.round((width - hPad * 2) * 0.58));
   const [query, setQuery] = useState('');
 
   const filtered = users.filter(u =>
@@ -125,16 +132,14 @@ export function SwitchUserScreen({ users, onSelectUser, onLoginViaEmail }: Props
       showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps="handled"
     >
-      <View style={styles.topGroup}>
-        <Text style={styles.title}>Switch user</Text>
-        <WorkersIllustration size={illustrationSize} />
-        <Text style={styles.subtitle}>
-          Users who have logged into this device will appear here
-        </Text>
-      </View>
+      {/* Title */}
+      <Text style={styles.title}>Switch user</Text>
 
+      {/* Illustration */}
+      <WorkersIllustration size={illustrationSize} />
+
+      {/* Search + cards + caption */}
       <View style={styles.listGroup}>
-        {/* Search */}
         <View style={styles.searchWrap}>
           <View style={styles.searchIcon}><SearchIcon /></View>
           <TextInput
@@ -142,13 +147,12 @@ export function SwitchUserScreen({ users, onSelectUser, onLoginViaEmail }: Props
             value={query}
             onChangeText={setQuery}
             placeholder="Search for a name"
-            placeholderTextColor={T.textPlaceholder}
+            placeholderTextColor="#BFC6D4"
             autoCapitalize="none"
             autoCorrect={false}
           />
         </View>
 
-        {/* User cards — horizontal scroll */}
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -159,6 +163,10 @@ export function SwitchUserScreen({ users, onSelectUser, onLoginViaEmail }: Props
           ))}
         </ScrollView>
 
+        <Text style={styles.caption}>
+          Select a profile from the people who have logged into this device before
+        </Text>
+
         {/* Divider */}
         <View style={styles.dividerRow}>
           <View style={styles.dividerLine} />
@@ -166,7 +174,6 @@ export function SwitchUserScreen({ users, onSelectUser, onLoginViaEmail }: Props
           <View style={styles.dividerLine} />
         </View>
 
-        {/* Log in via email */}
         <TouchableOpacity style={styles.secondaryBtn} onPress={onLoginViaEmail} activeOpacity={0.85}>
           <Text style={styles.secondaryBtnText}>Log in via username or email</Text>
         </TouchableOpacity>
@@ -183,39 +190,30 @@ const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: T.bg },
   container: {
     minHeight: '100%',
+    alignItems: 'center',
     justifyContent: 'center',
     paddingTop: 48,
     paddingBottom: 48,
-    gap: 40,
-  },
-  topGroup: {
-    alignItems: 'center',
-    gap: 16,
+    gap: 24,
   },
   title: {
     fontSize: 34,
     fontFamily: 'NotoSans_700Bold',
-    color: T.textDefault,
+    color: '#1f2533',
     textAlign: 'center',
     letterSpacing: -1,
     lineHeight: 40,
   },
-  subtitle: {
-    fontSize: 16,
-    fontFamily: 'NotoSans_400Regular',
-    color: T.textWeaker,
-    textAlign: 'center',
-    lineHeight: 24,
-  },
   listGroup: {
     gap: 12,
+    width: '100%',
   },
   searchWrap: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: T.surface,
+    backgroundColor: '#ffffff',
     borderWidth: 1,
-    borderColor: T.border,
+    borderColor: '#BFC6D4',
     borderRadius: 8,
     paddingHorizontal: 12,
     height: 44,
@@ -224,27 +222,34 @@ const styles = StyleSheet.create({
   searchIcon: { flexShrink: 0 },
   searchInput: {
     flex: 1,
-    fontSize: 15,
+    fontSize: 14,
     fontFamily: 'NotoSans_400Regular',
-    color: T.textDefault,
+    color: '#1f2533',
   },
   cardsRow: {
     gap: 8,
     paddingVertical: 4,
   },
+  caption: {
+    fontSize: 12,
+    fontFamily: 'NotoSans_400Regular',
+    color: '#545f70',
+    textAlign: 'center',
+    lineHeight: 16,
+  },
   dividerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 8,
     marginVertical: 4,
   },
-  dividerLine: { flex: 1, height: 1, backgroundColor: '#dbe0eb' },
-  dividerText: { fontSize: 16, fontFamily: 'NotoSans_400Regular', color: T.textWeaker },
+  dividerLine: { flex: 1, height: 1, backgroundColor: '#BFC6D4' },
+  dividerText: { fontSize: 16, fontFamily: 'NotoSans_400Regular', color: '#545f70' },
   secondaryBtn: {
     height: 48,
-    backgroundColor: T.surface,
+    backgroundColor: '#ffffff',
     borderWidth: 1,
-    borderColor: '#dbe0eb',
+    borderColor: '#BFC6D4',
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',

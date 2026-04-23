@@ -13,10 +13,27 @@ import { PinEntryScreen } from './src/screens/PinEntryScreen';
 type Screen = 'login' | 'authenticating' | 'transitioning-to-home' | 'home' | 'switch-user' | 'pin-entry';
 
 const STORED_USERS: StoredUser[] = [
-  { id: '1', name: 'Old Mate',   email: 'old.mate@safetyculture.io',  initials: 'OM', accentColor: '#6559ff' },
-  { id: '2', name: 'Josh Rat',   email: 'josh.rat@safetyculture.io',  initials: 'JR', accentColor: '#0ea472' },
-  { id: '3', name: 'Sarah Chen', email: 's.chen@safetyculture.io',    initials: 'SC', accentColor: '#e05c1a' },
-  { id: '4', name: 'Marcus Webb', email: 'm.webb@safetyculture.io',   initials: 'MW', accentColor: '#0891b2' },
+  { id: '1',  name: 'Old Mate',       email: 'old.mate@safetyculture.io',      initials: 'OM', accentColor: '#6559ff' },
+  { id: '2',  name: 'Josh Rat',       email: 'josh.rat@safetyculture.io',      initials: 'JR', accentColor: '#0ea472' },
+  { id: '3',  name: 'Sarah Chen',     email: 's.chen@safetyculture.io',        initials: 'SC', accentColor: '#e05c1a' },
+  { id: '4',  name: 'Marcus Webb',    email: 'm.webb@safetyculture.io',        initials: 'MW', accentColor: '#0891b2' },
+  { id: '5',  name: 'Priya Nair',     email: 'p.nair@safetyculture.io',        initials: 'PN', accentColor: '#7c3aed' },
+  { id: '6',  name: 'Liam Torres',    email: 'l.torres@safetyculture.io',      initials: 'LT', accentColor: '#b45309' },
+  { id: '7',  name: 'Anika Müller',   email: 'a.muller@safetyculture.io',      initials: 'AM', accentColor: '#0f766e' },
+  { id: '8',  name: 'Daniel Park',    email: 'd.park@safetyculture.io',        initials: 'DP', accentColor: '#be123c' },
+  { id: '9',  name: 'Fatima Al-Sayed',email: 'f.alsayed@safetyculture.io',     initials: 'FA', accentColor: '#1d4ed8' },
+  { id: '10', name: 'Connor Walsh',   email: 'c.walsh@safetyculture.io',       initials: 'CW', accentColor: '#15803d' },
+  { id: '11', name: 'Yuki Tanaka',    email: 'y.tanaka@safetyculture.io',      initials: 'YT', accentColor: '#9333ea' },
+  { id: '12', name: 'Brooke Ellis',   email: 'b.ellis@safetyculture.io',       initials: 'BE', accentColor: '#c2410c' },
+  { id: '13', name: 'James Okafor',   email: 'j.okafor@safetyculture.io',      initials: 'JO', accentColor: '#0369a1' },
+  { id: '14', name: 'Mei Lin',        email: 'm.lin@safetyculture.io',         initials: 'ML', accentColor: '#065f46' },
+  { id: '15', name: 'Ryan Patel',     email: 'r.patel@safetyculture.io',       initials: 'RP', accentColor: '#6d28d9' },
+  { id: '16', name: 'Isla Mackenzie', email: 'i.mackenzie@safetyculture.io',   initials: 'IM', accentColor: '#b91c1c' },
+  { id: '17', name: 'Andre Dupont',   email: 'a.dupont@safetyculture.io',      initials: 'AD', accentColor: '#0c4a6e' },
+  { id: '18', name: 'Zoe Williams',   email: 'z.williams@safetyculture.io',    initials: 'ZW', accentColor: '#166534' },
+  { id: '19', name: 'Sam Nguyen',     email: 's.nguyen@safetyculture.io',      initials: 'SN', accentColor: '#92400e' },
+  { id: '20', name: 'Chloe Tremblay', email: 'c.tremblay@safetyculture.io',    initials: 'CT', accentColor: '#3730a3' },
+  { id: '21', name: 'Tariq Hassan',   email: 't.hassan@safetyculture.io',      initials: 'TH', accentColor: '#155e75' },
 ];
 
 const DEV_TABS: { label: string; screen: Screen }[] = [
@@ -91,7 +108,7 @@ export default function App() {
       case 'switch-user':
         return (
           <SwitchUserScreen
-            users={STORED_USERS}
+            users={STORED_USERS.filter(u => u.id !== activeUser.id)}
             onSelectUser={handleSelectUser}
             onLoginViaEmail={() => setScreen('login')}
           />

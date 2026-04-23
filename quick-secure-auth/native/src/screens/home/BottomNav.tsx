@@ -1,21 +1,65 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, Platform } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
+import Svg, { Path, Rect, Polyline, Line } from 'react-native-svg';
 
-// Figma asset URLs — valid 7 days from 21 Apr 2026
-const NAV_ICONS = {
-  home:        'https://www.figma.com/api/mcp/asset/cca7e8f7-314d-47f2-8c45-3b0644431dc3',
-  inspections: 'https://www.figma.com/api/mcp/asset/f08ee9aa-27e1-427f-8b1f-a88864bf12e2',
-  actions:     'https://www.figma.com/api/mcp/asset/43a1a620-e1f8-4381-bd02-d04d05609325',
-  training:    'https://www.figma.com/api/mcp/asset/ee0d10f0-700e-499c-b49b-c5ff592e7ae0',
-  more:        'https://www.figma.com/api/mcp/asset/99a906cb-5af1-461e-916c-23747dfb27a2',
-};
+const ACTIVE = '#4740d4';
+const INACTIVE = '#545f70';
 
-const NAV_ITEMS: { label: string; key: keyof typeof NAV_ICONS; active: boolean }[] = [
-  { label: 'Home',        key: 'home',        active: true },
-  { label: 'Inspections', key: 'inspections', active: false },
-  { label: 'Actions',     key: 'actions',     active: false },
-  { label: 'Training',    key: 'training',    active: false },
-  { label: 'More',        key: 'more',        active: false },
+function HomeIcon({ color }: { color: string }) {
+  return (
+    <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <Path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+      <Path d="M9 22V12h6v10" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+    </Svg>
+  );
+}
+
+function InspectionsIcon({ color }: { color: string }) {
+  return (
+    <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <Path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+      <Rect x="8" y="2" width="8" height="4" rx="1" ry="1" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+      <Line x1="8" y1="11" x2="16" y2="11" stroke={color} strokeWidth="1.75" strokeLinecap="round" />
+      <Line x1="8" y1="15" x2="14" y2="15" stroke={color} strokeWidth="1.75" strokeLinecap="round" />
+    </Svg>
+  );
+}
+
+function ActionsIcon({ color }: { color: string }) {
+  return (
+    <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <Polyline points="9,11 12,14 22,4" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+      <Path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+    </Svg>
+  );
+}
+
+function TrainingIcon({ color }: { color: string }) {
+  return (
+    <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <Path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+      <Path d="M6 12v5c3 3 9 3 12 0v-5" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+    </Svg>
+  );
+}
+
+function MoreIcon({ color }: { color: string }) {
+  return (
+    <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <Rect x="3" y="3" width="7" height="7" rx="1" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+      <Rect x="14" y="3" width="7" height="7" rx="1" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+      <Rect x="3" y="14" width="7" height="7" rx="1" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+      <Rect x="14" y="14" width="7" height="7" rx="1" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+    </Svg>
+  );
+}
+
+const NAV_ITEMS = [
+  { label: 'Home',        Icon: HomeIcon,        active: true },
+  { label: 'Inspections', Icon: InspectionsIcon, active: false },
+  { label: 'Actions',     Icon: ActionsIcon,     active: false },
+  { label: 'Training',    Icon: TrainingIcon,    active: false },
+  { label: 'More',        Icon: MoreIcon,        active: false },
 ];
 
 export function BottomNav() {
@@ -23,16 +67,17 @@ export function BottomNav() {
     <View style={styles.container}>
       <View style={styles.border} />
       <View style={styles.row}>
-        {NAV_ITEMS.map(({ label, key, active }) => (
-          <View key={label} style={styles.item}>
-            <Image
-              source={{ uri: NAV_ICONS[key] }}
-              style={[styles.icon, { tintColor: active ? '#4740d4' : '#545f70' }]}
-            />
-            <Text style={[styles.label, active && styles.labelActive]}>{label}</Text>
-          </View>
-        ))}
+        {NAV_ITEMS.map(({ label, Icon, active }) => {
+          const color = active ? ACTIVE : INACTIVE;
+          return (
+            <View key={label} style={styles.item}>
+              <Icon color={color} />
+              <Text style={[styles.label, { color }]}>{label}</Text>
+            </View>
+          );
+        })}
       </View>
+      {Platform.OS === 'ios' && <View style={styles.homeIndicator} />}
     </View>
   );
 }
@@ -50,11 +95,18 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     paddingTop: 8,
-    paddingBottom: Platform.OS === 'ios' ? 20 : 12,
+    paddingBottom: 3,
     paddingHorizontal: 8,
   },
   item: { flex: 1, alignItems: 'center', gap: 4 },
-  icon: { width: 24, height: 24 },
-  label: { fontSize: 11, fontFamily: 'NotoSans_400Regular', color: '#545f70' },
-  labelActive: { fontFamily: 'NotoSans_700Bold', color: '#4740d4' },
+  label: { fontSize: 11, fontFamily: 'NotoSans_400Regular' },
+  homeIndicator: {
+    alignSelf: 'center',
+    width: 134,
+    height: 5,
+    borderRadius: 100,
+    backgroundColor: 'rgba(29,35,48,0.4)',
+    marginBottom: 8,
+    marginTop: 4,
+  },
 });

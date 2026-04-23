@@ -1,59 +1,40 @@
 import React, { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,
-  KeyboardAvoidingView, Platform, ScrollView, useWindowDimensions,
+  KeyboardAvoidingView, Platform, ScrollView, Image,
 } from 'react-native';
-import Svg, { Path, Circle, Line, Rect } from 'react-native-svg';
+import Svg, { Path, Circle, Line } from 'react-native-svg';
 import { T } from '../tokens';
 
 interface Props {
   onAuthenticated: () => void;
 }
 
-const ORG_NAME = 'Glencore Mining';
-const ORG_ID = '93463472';
+const SC_LOGO = 'https://www.figma.com/api/mcp/asset/b9b4a2f7-faa5-4f0f-b900-859223c80123';
 
-function EyeIcon({ visible, color }: { visible: boolean; color: string }) {
+function EyeIcon({ visible }: { visible: boolean }) {
   if (visible) {
     return (
       <Svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-        <Path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke={color} strokeWidth="2" />
-        <Circle cx="12" cy="12" r="3" stroke={color} strokeWidth="2" />
+        <Path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="#545f70" strokeWidth="2" />
+        <Circle cx="12" cy="12" r="3" stroke="#545f70" strokeWidth="2" />
       </Svg>
     );
   }
   return (
     <Svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <Path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" stroke={color} strokeWidth="2" strokeLinecap="round" />
-      <Path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" stroke={color} strokeWidth="2" strokeLinecap="round" />
-      <Line x1="1" y1="1" x2="23" y2="23" stroke={color} strokeWidth="2" strokeLinecap="round" />
-    </Svg>
-  );
-}
-
-function CopyIcon({ color }: { color: string }) {
-  return (
-    <Svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-      <Rect x="9" y="9" width="13" height="13" rx="2" stroke={color} strokeWidth="2" />
-      <Path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke={color} strokeWidth="2" strokeLinecap="round" />
+      <Path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" stroke="#545f70" strokeWidth="2" strokeLinecap="round" />
+      <Path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" stroke="#545f70" strokeWidth="2" strokeLinecap="round" />
+      <Line x1="1" y1="1" x2="23" y2="23" stroke="#545f70" strokeWidth="2" strokeLinecap="round" />
     </Svg>
   );
 }
 
 export function LoginScreen({ onAuthenticated }: Props) {
-  const { width } = useWindowDimensions();
-  const cardMaxWidth = width >= 768 ? 520 : 400;
-  const scrollPad = Math.max(16, (width - cardMaxWidth) / 2);
   const [step, setStep] = useState<'username' | 'password'>('username');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-
-  const handleContinue = () => {
-    if (username.trim()) setStep('password');
-  };
-
-  const handleBack = () => setStep('username');
 
   return (
     <KeyboardAvoidingView
@@ -61,23 +42,20 @@ export function LoginScreen({ onAuthenticated }: Props) {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       {step === 'password' && (
-        <TouchableOpacity style={styles.backBtn} onPress={handleBack} activeOpacity={0.7}>
+        <TouchableOpacity style={styles.backBtn} onPress={() => setStep('username')} activeOpacity={0.7}>
           <Text style={styles.backBtnText}>← Back</Text>
         </TouchableOpacity>
       )}
 
       <ScrollView
-        contentContainerStyle={[styles.scroll, { paddingHorizontal: scrollPad }]}
+        contentContainerStyle={styles.scroll}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.logoWrap}>
-          <Text style={styles.logo}>SafetyCulture</Text>
-          <View style={styles.logoLine} />
-        </View>
+        <Image source={{ uri: SC_LOGO }} style={styles.logo} resizeMode="contain" />
 
-        <View style={[styles.card, { maxWidth: cardMaxWidth }]}>
-          <Text style={styles.title}>Log in to {ORG_NAME}</Text>
+        <View style={styles.card}>
+          <Text style={styles.title}>Log in</Text>
 
           {step === 'username' ? (
             <>
@@ -90,14 +68,14 @@ export function LoginScreen({ onAuthenticated }: Props) {
                   autoCapitalize="none"
                   autoCorrect={false}
                   returnKeyType="done"
-                  onSubmitEditing={handleContinue}
-                  placeholderTextColor="rgba(84,95,112,0.4)"
+                  onSubmitEditing={() => { if (username.trim()) setStep('password'); }}
+                  placeholderTextColor="#BFC6D4"
                 />
               </View>
 
               <TouchableOpacity
                 style={[styles.primaryBtn, !username.trim() && styles.primaryBtnDisabled]}
-                onPress={handleContinue}
+                onPress={() => { if (username.trim()) setStep('password'); }}
                 activeOpacity={0.85}
               >
                 <Text style={styles.primaryBtnText}>Continue</Text>
@@ -125,29 +103,14 @@ export function LoginScreen({ onAuthenticated }: Props) {
                     autoCorrect={false}
                     returnKeyType="done"
                     onSubmitEditing={onAuthenticated}
-                    placeholderTextColor="rgba(84,95,112,0.4)"
+                    placeholderTextColor="#BFC6D4"
                   />
                   <TouchableOpacity
                     style={styles.inputAction}
                     onPress={() => setShowPassword(v => !v)}
                     activeOpacity={0.7}
                   >
-                    <EyeIcon visible={showPassword} color="#545f70" />
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.field}>
-                <Text style={styles.label}>Organisation ID</Text>
-                <View style={styles.inputRow}>
-                  <TextInput
-                    style={[styles.input, styles.inputFlex, styles.inputDisabled]}
-                    value={ORG_ID}
-                    editable={false}
-                    placeholderTextColor="rgba(84,95,112,0.4)"
-                  />
-                  <TouchableOpacity style={styles.inputAction} activeOpacity={0.7}>
-                    <CopyIcon color="#545f70" />
+                    <EyeIcon visible={showPassword} />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -180,47 +143,64 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 48,
+    paddingHorizontal: 24,
+    gap: 32,
   },
-  logoWrap: { alignItems: 'center', marginBottom: 24 },
-  logo: { fontSize: 22, fontFamily: 'NotoSans_700Bold', color: '#1f2533', letterSpacing: -0.3 },
-  logoLine: { marginTop: 4, width: 32, height: 2.5, borderRadius: 2, backgroundColor: T.accent },
+  logo: {
+    width: 137,
+    height: 24,
+  },
   card: {
     width: '100%',
+    maxWidth: 420,
     backgroundColor: '#ffffff',
-    borderRadius: 16,
-    padding: 28,
+    borderRadius: 8,
+    paddingTop: 24,
+    paddingBottom: 40,
+    paddingHorizontal: 16,
+    gap: 24,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 4,
-    gap: 20,
+    shadowOffset: { width: 0, height: 14 },
+    shadowOpacity: 0.16,
+    shadowRadius: 28,
+    elevation: 8,
   },
-  title: { fontSize: 24, fontFamily: 'NotoSans_700Bold', color: '#1f2533' },
-  subtitle: { fontSize: 14, fontFamily: 'NotoSans_400Regular', color: '#3f495a', lineHeight: 20, marginTop: -8 },
+  title: {
+    fontSize: 24,
+    fontFamily: 'NotoSans_700Bold',
+    color: '#1f2533',
+    letterSpacing: -0.5,
+    lineHeight: 32,
+  },
+  subtitle: {
+    fontSize: 14,
+    fontFamily: 'NotoSans_400Regular',
+    color: '#3f495a',
+    lineHeight: 20,
+    marginTop: -8,
+  },
   subtitleBold: { fontFamily: 'NotoSans_700Bold', color: '#1f2533' },
   field: { gap: 6 },
-  label: { fontSize: 14, fontFamily: 'NotoSans_700Bold', color: '#1f2533' },
+  label: { fontSize: 14, fontFamily: 'NotoSans_400Regular', color: '#1f2533' },
   input: {
-    height: 44,
+    height: 40,
     borderWidth: 1,
-    borderColor: '#dbe0eb',
+    borderColor: '#BFC6D4',
     borderRadius: 8,
     paddingHorizontal: 12,
-    fontSize: 15,
+    fontSize: 14,
     fontFamily: 'NotoSans_400Regular',
     color: '#1f2533',
     backgroundColor: '#ffffff',
   },
   inputFlex: { flex: 1, borderRightWidth: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 },
-  inputDisabled: { backgroundColor: '#f2f3f7', color: '#545f70' },
   inputRow: { flexDirection: 'row', alignItems: 'center' },
   inputAction: {
-    height: 44,
-    width: 44,
+    height: 40,
+    width: 40,
     borderWidth: 1,
     borderLeftWidth: 0,
-    borderColor: '#dbe0eb',
+    borderColor: '#BFC6D4',
     borderTopRightRadius: 8,
     borderBottomRightRadius: 8,
     alignItems: 'center',
@@ -228,14 +208,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   primaryBtn: {
-    height: 48,
+    height: 40,
     backgroundColor: T.accent,
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
   primaryBtnDisabled: { opacity: 0.45 },
-  primaryBtnText: { fontSize: 16, fontFamily: 'NotoSans_700Bold', color: '#ffffff' },
+  primaryBtnText: { fontSize: 14, fontFamily: 'NotoSans_700Bold', color: '#ffffff' },
   linkBtn: { alignItems: 'center', paddingVertical: 4 },
   linkText: { fontSize: 14, fontFamily: 'NotoSans_400Regular', color: T.accent },
 });
