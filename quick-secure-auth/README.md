@@ -2,7 +2,11 @@
 
 > Enable any user to pick up any device for quick, secure access to SafetyCulture.
 
-Multi-platform prototype showcasing tiered authentication for frontline workers on shared devices. Two personas in scope: **Sam** (admin — org-level configuration) and **Old Mate** (FLW — frontline worker login).
+| Prototype | Try it |
+|-----------|--------|
+| Admin configuration | [Open →](https://quick-secure-auth-admin.vercel.app/) |
+| SC-PIN-Prototype | [Open in Expo →](https://expo.dev/accounts/theuirat/projects/SC-PIN-Prototype) |
+| SC-Oloid-Prototype | [Open in Expo →](https://expo.dev/accounts/theuirat/projects/SC-Oloid-Prototype) |
 
 ---
 
