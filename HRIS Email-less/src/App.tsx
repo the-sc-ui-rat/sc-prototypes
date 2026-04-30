@@ -11,14 +11,15 @@ import { UsersScreen } from './screens/UsersScreen'
 import { DefaultPasswordBannerPreview } from './screens/DefaultPasswordBannerPreview'
 import { SummaryPreview } from './screens/SummaryPreview'
 import { SummaryRedesign } from './screens/SummaryRedesign'
+import { ImportFlow } from './screens/ImportFlow'
 
-type Screen = 'admin' | 'welcome' | 'login' | 'password' | 'email-password' | 'forgot' | 'loading' | 'home' | 'users' | 'banner-preview' | 'summary-preview' | 'summary-redesign'
+type Screen = 'admin' | 'welcome' | 'login' | 'password' | 'email-password' | 'forgot' | 'loading' | 'home' | 'users' | 'banner-preview' | 'summary-preview' | 'summary-redesign' | 'import-flow'
 
 export default function App() {
   const params = new URLSearchParams(window.location.search)
   const flow = params.get('flow')
   const [screen, setScreen] = useState<Screen>(
-    flow === 'admin' ? 'admin' : flow === 'invite' ? 'login' : flow === 'users' ? 'users' : flow === 'banner' ? 'banner-preview' : flow === 'summary' ? 'summary-preview' : flow === 'redesign' ? 'summary-redesign' : 'welcome'
+    flow === 'admin' ? 'admin' : flow === 'invite' ? 'login' : flow === 'users' ? 'users' : flow === 'banner' ? 'banner-preview' : flow === 'summary' ? 'summary-preview' : flow === 'redesign' ? 'import-flow' : 'welcome'
   )
   const [username, setUsername] = useState('')
 
@@ -75,6 +76,8 @@ export default function App() {
           <SummaryPreview />
         ) : screen === 'summary-redesign' ? (
           <SummaryRedesign />
+        ) : screen === 'import-flow' ? (
+          <ImportFlow />
         ) : (
           <HomeScreen />
         )}

@@ -47,7 +47,7 @@ const SCENARIOS: Scenario[] = [
 
 const GROUPS = ['Email-less', 'Email', 'Mixed'] as const
 
-export function SummaryRedesign() {
+export function SummaryRedesign({ onBack }: { onBack?: () => void }) {
   const [scenarioId, setScenarioId] = useState<ScenarioId>('mixed-default-pwd')
   const [sendEmail, setSendEmail] = useState(true)
   const [cpnlOn, setCpnlOn] = useState(false)
@@ -196,7 +196,7 @@ export function SummaryRedesign() {
         {/* Footer — pb-[32px] px-[32px], buttons right-aligned */}
         <div className="pb-[32px] px-[32px] flex justify-end">
           <div className="flex gap-[8px] items-center">
-            <button className="px-[16px] h-10 border border-[#bfc6d4] text-[#3f495a] text-[14px] font-medium rounded-lg hover:bg-[#f8f9fc] transition-colors">
+            <button onClick={onBack} className="px-[16px] h-10 border border-[#bfc6d4] text-[#3f495a] text-[14px] font-medium rounded-lg hover:bg-[#f8f9fc] transition-colors">
               Back
             </button>
             <button className="px-[16px] h-10 bg-[#675DF4] hover:bg-[#5C53DC] text-white text-[14px] font-semibold rounded-lg transition-colors">
