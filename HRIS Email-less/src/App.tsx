@@ -12,18 +12,25 @@ import { DefaultPasswordBannerPreview } from './screens/DefaultPasswordBannerPre
 import { SummaryPreview } from './screens/SummaryPreview'
 import { SummaryRedesign } from './screens/SummaryRedesign'
 import { ImportFlow } from './screens/ImportFlow'
+import { HrisSetupFlow } from './screens/HrisSetupFlow'
 
-type Screen = 'admin' | 'welcome' | 'login' | 'password' | 'email-password' | 'forgot' | 'loading' | 'home' | 'users' | 'banner-preview' | 'summary-preview' | 'summary-redesign' | 'import-flow'
+type Screen = 'admin' | 'welcome' | 'login' | 'password' | 'email-password' | 'forgot' | 'loading' | 'home' | 'users' | 'banner-preview' | 'summary-preview' | 'summary-redesign' | 'import-flow' | 'hris'
 
 export default function App() {
   const params = new URLSearchParams(window.location.search)
   const flow = params.get('flow')
   const [screen, setScreen] = useState<Screen>(
-    flow === 'admin' ? 'admin' : flow === 'invite' ? 'login' : flow === 'users' ? 'users' : flow === 'banner' ? 'banner-preview' : flow === 'summary' ? 'summary-preview' : flow === 'redesign' ? 'import-flow' : 'welcome'
+    flow === 'admin' ? 'admin'
+    : flow === 'invite' ? 'login'
+    : flow === 'users' ? 'users'
+    : flow === 'banner' ? 'banner-preview'
+    : flow === 'summary' ? 'summary-preview'
+    : flow === 'redesign' || flow === 'csv' ? 'import-flow'
+    : flow === 'hris' ? 'hris'
+    : 'welcome'
   )
   const [username, setUsername] = useState('')
 
-  // Auto-advance from loading → home after 1.5 s
   useEffect(() => {
     if (screen !== 'loading') return
     const t = setTimeout(() => setScreen('home'), 1500)
@@ -78,6 +85,8 @@ export default function App() {
           <SummaryRedesign />
         ) : screen === 'import-flow' ? (
           <ImportFlow />
+        ) : screen === 'hris' ? (
+          <HrisSetupFlow />
         ) : (
           <HomeScreen />
         )}
