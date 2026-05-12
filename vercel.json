@@ -1,0 +1,9 @@
+{
+  "buildCommand": "bash hub/build.sh",
+  "outputDirectory": "hub/dist",
+  "rewrites": [
+    { "source": "/login/:path*", "destination": "/login/index.html" },
+    { "source": "/admin/:path*", "destination": "/admin/index.html" },
+    { "source": "/hris/:path*",  "destination": "/hris/index.html"  }
+  ]
+}

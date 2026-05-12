@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SC Prototypes</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent:      #6559ff;
+      --base:        #e9edf6;
+      --surface:     #ffffff;
+      --text:        #1f2533;
+      --text-weaker: #3f495a;
+      --border:      #d2d8e8;
+      --radius:      12px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--base);
+      color: var(--text);
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sc-wordmark {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .sc-wordmark svg { flex-shrink: 0; }
+
+    .sc-wordmark span {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+    }
+
+    .divider {
+      width: 1px;
+      height: 20px;
+      background: var(--border);
+    }
+
+    .header-label {
+      font-size: 14px;
+      color: var(--text-weaker);
+    }
+
+    main {
+      flex: 1;
+      padding: 48px 24px;
+      max-width: 960px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: var(--text-weaker);
+      margin-bottom: 40px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+    }
+
+    .card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 16px rgba(101, 89, 255, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .card-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #f0efff;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+      width: fit-content;
+      letter-spacing: 0.2px;
+    }
+
+    .card-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .card h2 {
+      font-size: 17px;
+      font-weight: 650;
+      letter-spacing: -0.2px;
+      line-height: 1.3;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: var(--text-weaker);
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .card-flows {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .flow-chip {
+      font-size: 12px;
+      background: var(--base);
+      color: var(--text-weaker);
+      border: 1px solid var(--border);
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    .card-cta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: 4px;
+    }
+
+    .card-cta svg {
+      transition: transform 0.15s;
+    }
+
+    .card:hover .card-cta svg {
+      transform: translateX(3px);
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-weaker);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 16px;
+      margin-top: 40px;
+    }
+
+    .section-label:first-of-type { margin-top: 0; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="sc-wordmark">
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="28" height="28" rx="6" fill="#6559ff"/>
+      <path d="M8 14C8 10.686 10.686 8 14 8C15.657 8 17.157 8.672 18.243 9.757L20.364 7.636C18.743 6.015 16.485 5 14 5C9.029 5 5 9.029 5 14C5 18.971 9.029 23 14 23C16.485 23 18.743 21.985 20.364 20.364L18.243 18.243C17.157 19.328 15.657 20 14 20C10.686 20 8 17.314 8 14Z" fill="white"/>
+      <circle cx="19.5" cy="14" r="3.5" fill="white"/>
+    </svg>
+    <span>SafetyCulture</span>
+  </div>
+  <div class="divider"></div>
+  <span class="header-label">Prototypes</span>
+</header>
+
+<main>
+  <h1>Design Prototypes</h1>
+  <p class="subtitle">Authentication, HRIS, and admin flows — all in one place.</p>
+
+  <p class="section-label">Authentication</p>
+  <div class="grid">
+
+    <a href="/login/" class="card">
+      <div class="card-badge"><span class="dot"></span> Email-less</div>
+      <h2>Login Flow</h2>
+      <p>Mobile-first auth screens — welcome, username/org login, password entry, and forgot password.</p>
+      <div class="card-flows">
+        <span class="flow-chip">Welcome</span>
+        <span class="flow-chip">Login</span>
+        <span class="flow-chip">Password</span>
+        <span class="flow-chip">Forgot</span>
+      </div>
+      <div class="card-cta">
+        Open prototype
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </a>
+
+    <a href="/login/?flow=invite" class="card">
+      <div class="card-badge"><span class="dot"></span> Email-less</div>
+      <h2>Invite Flow</h2>
+      <p>Login via invite link — pre-filled org context (Woolworths) with direct entry to password screen.</p>
+      <div class="card-flows">
+        <span class="flow-chip">Invite link</span>
+        <span class="flow-chip">Org pre-filled</span>
+      </div>
+      <div class="card-cta">
+        Open prototype
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </a>
+
+  </div>
+
+  <p class="section-label">HRIS &amp; User Management</p>
+  <div class="grid">
+
+    <a href="/hris/?flow=redesign" class="card">
+      <div class="card-badge"><span class="dot"></span> HRIS</div>
+      <h2>Import Flow</h2>
+      <p>CSV / HRIS user import redesign — step-by-step upload, mapping, and confirmation flow.</p>
+      <div class="card-flows">
+        <span class="flow-chip">CSV upload</span>
+        <span class="flow-chip">Field mapping</span>
+        <span class="flow-chip">Confirmation</span>
+      </div>
+      <div class="card-cta">
+        Open prototype
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </a>
+
+    <a href="/hris/?flow=hris" class="card">
+      <div class="card-badge"><span class="dot"></span> HRIS</div>
+      <h2>HRIS Setup Flow</h2>
+      <p>Configure an HRIS integration from scratch — provider selection, field mapping, sync settings.</p>
+      <div class="card-flows">
+        <span class="flow-chip">Provider select</span>
+        <span class="flow-chip">Field mapping</span>
+        <span class="flow-chip">Sync config</span>
+      </div>
+      <div class="card-cta">
+        Open prototype
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </a>
+
+    <a href="/hris/?flow=users" class="card">
+      <div class="card-badge"><span class="dot"></span> HRIS</div>
+      <h2>Users List</h2>
+      <p>Admin users list view with HRIS-synced status indicators and management actions.</p>
+      <div class="card-flows">
+        <span class="flow-chip">User list</span>
+        <span class="flow-chip">HRIS status</span>
+      </div>
+      <div class="card-cta">
+        Open prototype
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </a>
+
+  </div>
+
+  <p class="section-label">Admin</p>
+  <div class="grid">
+
+    <a href="/admin/" class="card">
+      <div class="card-badge"><span class="dot"></span> Admin</div>
+      <h2>Admin Shell — Settings</h2>
+      <p>Full SC admin application shell with sidebar nav. Opens to Org Settings → Login tab by default.</p>
+      <div class="card-flows">
+        <span class="flow-chip">Sidebar nav</span>
+        <span class="flow-chip">Org Settings</span>
+        <span class="flow-chip">Login config</span>
+      </div>
+      <div class="card-cta">
+        Open prototype
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </a>
+
+    <a href="/hris/?flow=admin" class="card">
+      <div class="card-badge"><span class="dot"></span> Admin</div>
+      <h2>Admin Settings — Login</h2>
+      <p>Standalone admin settings login page — toggle email-less auth on/off with confirmation dialogs.</p>
+      <div class="card-flows">
+        <span class="flow-chip">Login toggle</span>
+        <span class="flow-chip">Confirm dialog</span>
+      </div>
+      <div class="card-cta">
+        Open prototype
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </a>
+
+  </div>
+</main>
+
+</body>
+</html>
