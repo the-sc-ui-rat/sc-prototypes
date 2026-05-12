@@ -28,24 +28,11 @@ npx vite build --base=/hris/
 cp -r dist/* "$DIST/hris/"
 echo "✓ hris built"
 
-# ── 3. quick-secure-auth/web → /admin/ ───────────────────────────────────────
+# ── 3. quick-secure-auth/web → /admin/ (pre-built, no SC private packages) ───
 echo ""
-echo "▶ [3/3] quick-secure-auth/web → /admin/"
-cd "$REPO_ROOT/quick-secure-auth/web"
-
-if ! command -v pnpm &> /dev/null; then
-  echo "  pnpm not found, installing…"
-  npm install -g pnpm --silent
-fi
-
-if [[ -z "${GITHUB_PACKAGES_TOKEN:-}" ]]; then
-  echo "  ⚠ GITHUB_PACKAGES_TOKEN not set — SC private packages may fail"
-fi
-
-pnpm install --silent
-pnpm exec vite build --config app/vite.config.ts --base=/admin/
-cp -r app/dist/* "$DIST/admin/"
-echo "✓ admin built"
+echo "▶ [3/3] quick-secure-auth/web → /admin/ (using pre-built assets)"
+cp -r "$REPO_ROOT/hub/pre-built/admin/"* "$DIST/admin/"
+echo "✓ admin copied"
 
 # ── Hub landing page ──────────────────────────────────────────────────────────
 echo ""
