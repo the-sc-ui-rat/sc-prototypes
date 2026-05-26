@@ -7,7 +7,7 @@ type ScenarioId =
   | 'mixed-default-pwd'
 
 type Scenario = {
-  id: ScenarioId; label: string; group: string
+  id: ScenarioId; label: string; linkedinLabel?: string; group: string
   total: number; withEmail: number; withoutEmail: number; updated: number
   showEmail: boolean
   cpnlToggle: boolean; cpnlCount: number; cpnlLabel: string
@@ -39,7 +39,7 @@ const SCENARIOS: Scenario[] = [
     total: 8, withEmail: 8, withoutEmail: 0, updated: 3,
     showEmail: true, cpnlToggle: true,  cpnlCount: 8, cpnlLabel: 'Require password reset on first login',
     forcedRow: false, forcedCount: 0 },
-  { id: 'mixed-default-pwd',     label: 'Email + email-less (default pwd)', group: 'Mixed',
+  { id: 'mixed-default-pwd',     label: 'Email + email-less (default pwd)', linkedinLabel: 'Combined (default password)', group: 'Mixed',
     total: 8, withEmail: 6, withoutEmail: 2, updated: 3,
     showEmail: true, cpnlToggle: true,  cpnlCount: 4, cpnlLabel: 'Require password reset on first login for users with email',
     forcedRow: true, forcedCount: 4 },
@@ -47,7 +47,14 @@ const SCENARIOS: Scenario[] = [
 
 const GROUPS = ['Email-less', 'Email', 'Mixed'] as const
 
+const LINKEDIN_GROUPS: Record<string, string> = {
+  'Email-less': 'Scenario A',
+  'Email': 'Scenario B',
+  'Mixed': 'Combined',
+}
+
 export function SummaryRedesign({ onBack }: { onBack?: () => void }) {
+  const isLinkedin = new URLSearchParams(window.location.search).get('linkedin') === '1'
   const [scenarioId, setScenarioId] = useState<ScenarioId>('mixed-default-pwd')
   const [sendEmail, setSendEmail] = useState(true)
   const [cpnlOn, setCpnlOn] = useState(false)
@@ -60,6 +67,9 @@ export function SummaryRedesign({ onBack }: { onBack?: () => void }) {
     setCpnlOn(false)
   }
 
+  const withEmailLabel    = isLinkedin ? 'Type A' : 'With email'
+  const withoutEmailLabel = isLinkedin ? 'Type B' : 'Without email'
+
   return (
     <div className="min-h-screen bg-[#e9edf6] flex flex-col items-center p-8">
 
@@ -67,7 +77,9 @@ export function SummaryRedesign({ onBack }: { onBack?: () => void }) {
       <div className="w-full max-w-[720px] mb-6 flex flex-col gap-3">
         {GROUPS.map(group => (
           <div key={group}>
-            <p className="text-[11px] font-semibold text-[#909aad] uppercase tracking-wider mb-2">{group}</p>
+            <p className="text-[11px] font-semibold text-[#909aad] uppercase tracking-wider mb-2">
+              {isLinkedin ? LINKEDIN_GROUPS[group] : group}
+            </p>
             <div className="flex flex-wrap gap-2">
               {SCENARIOS.filter(s => s.group === group).map(s => (
                 <button
@@ -79,7 +91,7 @@ export function SummaryRedesign({ onBack }: { onBack?: () => void }) {
                       : 'bg-white text-[#3f495a] border border-[#bfc6d4] hover:border-[#8a94a8]'
                   }`}
                 >
-                  {s.label}
+                  {isLinkedin && s.linkedinLabel ? s.linkedinLabel : s.label}
                 </button>
               ))}
             </div>
@@ -87,15 +99,13 @@ export function SummaryRedesign({ onBack }: { onBack?: () => void }) {
         ))}
       </div>
 
-      {/* Modal — rounded-[24px], exact Figma shadow */}
+      {/* Modal */}
       <div className="w-full max-w-[720px] bg-white rounded-[24px] shadow-[0px_2px_2px_0px_rgba(0,0,0,0.06),0px_4px_12px_0px_rgba(0,0,0,0.12)] relative">
 
-        {/* Close — top-[16px] right-[16px], 24×24, accent text color */}
         <button className="absolute top-[16px] right-[16px] size-[24px] flex items-center justify-center p-[4px] text-[#4740d4] hover:bg-[#f0f0ff] rounded transition-colors">
           <X size={16} />
         </button>
 
-        {/* Header — pt-[32px] px-[32px] pb-[16px] gap-[8px] */}
         <div className="pt-[32px] px-[32px] pb-[16px] flex flex-col gap-[8px]">
           <h1 className="text-[20px] font-semibold leading-[28px] tracking-[-0.25px] text-[#1f2533] overflow-hidden text-ellipsis">
             Review and submit
@@ -105,28 +115,24 @@ export function SummaryRedesign({ onBack }: { onBack?: () => void }) {
           </p>
         </div>
 
-        {/* Body — px-[32px] pb-[32px] */}
         <div className="px-[32px] pb-[32px]">
 
-          {/* Stats container — white, border top/left/right only, rounded top */}
           <div className="bg-white border-t border-l border-r border-[#dbe0eb] rounded-tl-[12px] rounded-tr-[12px] p-[20px]">
             <div className="flex items-center justify-between w-full">
-              <StatCol label="New users"     value={sc.total}        accent />
+              <StatCol label="New users"         value={sc.total}        accent />
               <div className="w-px h-[57px] bg-[#dbe0eb]" />
-              <StatCol label="With email"    value={sc.withEmail}    />
+              <StatCol label={withEmailLabel}     value={sc.withEmail}    />
               <div className="w-px h-[57px] bg-[#dbe0eb]" />
-              <StatCol label="Without email" value={sc.withoutEmail} />
+              <StatCol label={withoutEmailLabel}  value={sc.withoutEmail} />
               <div className="w-px h-[57px] bg-[#dbe0eb]" />
-              <StatCol label="Updated"       value={sc.updated}      />
+              <StatCol label="Updated"            value={sc.updated}      />
             </div>
           </div>
 
-          {/* Toggles container — grey bg, full border, rounded bottom */}
           <div className="bg-[#f8f9fc] border border-[#dbe0eb] rounded-bl-[12px] rounded-br-[12px] p-[20px] flex flex-col gap-[10px]">
 
             {sc.showEmail && (
               <>
-                {/* Email row — items-end justify-between (Edit email aligns to bottom) */}
                 <div className="flex items-end justify-between w-full">
                   <div className="flex flex-col gap-[12px] items-start shrink-0">
                     <div className="flex gap-[8px] items-center">
@@ -182,10 +188,14 @@ export function SummaryRedesign({ onBack }: { onBack?: () => void }) {
               <Info size={16} className="text-[#4740d4] shrink-0 mt-[2px]" />
               <div className="flex flex-col gap-[4px]">
                 <p className="text-[14px] font-medium leading-[20px] text-[#4740d4]">
-                  Password resets are required on first login for email-less.
+                  {isLinkedin
+                    ? 'Password resets are required on first login for Scenario A users.'
+                    : 'Password resets are required on first login for email-less.'}
                 </p>
                 <p className="text-[12px] font-medium leading-[16px] text-[#4740d4]">
-                  Email-less users will be required to set a new password on first login.
+                  {isLinkedin
+                    ? 'Scenario A users will be required to set a new password on first login.'
+                    : 'Email-less users will be required to set a new password on first login.'}
                 </p>
               </div>
             </div>
@@ -193,7 +203,6 @@ export function SummaryRedesign({ onBack }: { onBack?: () => void }) {
 
         </div>
 
-        {/* Footer — pb-[32px] px-[32px], buttons right-aligned */}
         <div className="pb-[32px] px-[32px] flex justify-end">
           <div className="flex gap-[8px] items-center">
             <button onClick={onBack} className="px-[16px] h-10 border border-[#bfc6d4] text-[#3f495a] text-[14px] font-medium rounded-lg hover:bg-[#f8f9fc] transition-colors">
@@ -210,7 +219,6 @@ export function SummaryRedesign({ onBack }: { onBack?: () => void }) {
   )
 }
 
-// Toggle: 42×24px, #675DF4 ON (Accent/Background -> Default), #bfc6d4 OFF
 function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) {
   return (
     <button
@@ -226,8 +234,6 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: boolean
   )
 }
 
-// Stat column: w-[96px], label 14px #3f495a, value 24px bold
-// accent (#4740d4) for "New users", weaker (#545f70) for the rest
 function StatCol({ label, value, accent }: { label: string; value: number; accent?: boolean }) {
   return (
     <div className="flex flex-col gap-[5px] items-start w-[96px] whitespace-nowrap">

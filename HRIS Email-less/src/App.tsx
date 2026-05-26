@@ -25,6 +25,7 @@ export default function App() {
     : flow === 'users' ? 'users'
     : flow === 'banner' ? 'banner-preview'
     : flow === 'summary' ? 'summary-preview'
+    : flow === 'summary-redesign' ? 'summary-redesign'
     : flow === 'redesign' || flow === 'csv' ? 'import-flow'
     : flow === 'hris' ? 'hris'
     : 'welcome'
