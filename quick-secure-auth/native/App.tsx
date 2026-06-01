@@ -24,14 +24,14 @@ const OLD_MATE: ConfirmedUser & LastUser & ScanUser = {
   name: 'Old Mate',
   email: 'old.mate@safetyculture.io',
   initials: 'OM',
-  org: 'Glencore Mining',
+  org: 'Ratcore',
 };
 
 const NEW_MATE: ConfirmedUser & LastUser & ScanUser = {
   name: 'New Mate',
   email: 'new.mate@safetyculture.io',
   initials: 'NM',
-  org: 'Glencore Mining',
+  org: 'Ratcore',
 };
 
 type Screen = 'idle' | 'idle-after-auth' | 'face-scan' | 'qr-scan' | 'password-login' | 'nfc-auth' | 'rfid-auth' | 'authenticating' | 'transitioning-to-home' | 'confirm' | 'home';

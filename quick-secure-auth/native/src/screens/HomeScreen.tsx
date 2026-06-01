@@ -14,7 +14,7 @@ interface Props {
   onPillDotMeasured?: (x: number, y: number, w: number, h: number) => void;
 }
 
-const ORG = { name: 'Glencore Mining', initials: 'GM' };
+const ORG = { name: 'Ratcore', initials: 'RC' };
 
 const INSPECTIONS = [
   {
