@@ -10,7 +10,7 @@ interface Props {
   onBack: () => void;
 }
 
-const ORG_NAME = 'Glencore Mining';
+const ORG_NAME = 'Ratcore';
 const ORG_ID = '93463472';
 
 function EyeIcon({ visible, color }: { visible: boolean; color: string }) {

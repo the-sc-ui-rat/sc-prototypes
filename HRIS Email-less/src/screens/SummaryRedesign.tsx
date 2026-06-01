@@ -236,7 +236,7 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: boolean
 
 function StatCol({ label, value, accent }: { label: string; value: number; accent?: boolean }) {
   return (
-    <div className="flex flex-col gap-[5px] items-start w-[96px] whitespace-nowrap">
+    <div className="flex flex-col gap-[5px] items-center w-[96px] whitespace-nowrap">
       <span className="text-[14px] font-medium leading-[20px] text-[#3f495a]">{label}</span>
       <span className={`text-[24px] font-bold leading-[32px] tracking-[-0.5px] ${accent ? 'text-[#4740d4]' : 'text-[#545f70]'}`}>
         {value}

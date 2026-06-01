@@ -211,7 +211,7 @@ export function KioskScreen({ method, onMethodChange, onTap }: Props) {
           <Text style={styles.logoText}>SafetyCulture</Text>
           <View style={styles.logoUnderline} />
         </View>
-        <Text style={styles.orgName}>Glencore Mining</Text>
+        <Text style={styles.orgName}>Ratcore</Text>
       </View>
 
       {/* Centre illustration */}

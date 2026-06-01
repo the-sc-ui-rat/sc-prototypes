@@ -54,8 +54,15 @@ export function ForgotScreen({ onReturn }: ForgotScreenProps) {
 
       <main className="flex-1 flex flex-col items-center justify-center py-8">
         <div className="flex flex-col w-[370px]" style={{ gap: 24 }}>
-          <img src="/Logo.png" alt="SafetyCulture" style={{ width: 137, height: 24, objectFit: 'contain', objectPosition: 'left' }} />
-          <div className="bg-surface rounded-[8px] w-full" style={{ paddingTop: 24, paddingBottom: 40, paddingLeft: 16, paddingRight: 16, boxShadow: '0px 2.4px 8px rgba(0,0,0,0.06), 0px 14px 28px rgba(0,0,0,0.16)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, height: 24 }}>
+            <svg width="24" height="24" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="28" height="28" rx="6" fill="#6559ff"/>
+              <path d="M8 14C8 10.686 10.686 8 14 8C15.657 8 17.157 8.672 18.243 9.757L20.364 7.636C18.743 6.015 16.485 5 14 5C9.029 5 5 9.029 5 14C5 18.971 9.029 23 14 23C16.485 23 18.743 21.985 20.364 20.364L18.243 18.243C17.157 19.328 15.657 20 14 20C10.686 20 8 17.314 8 14Z" fill="white"/>
+              <circle cx="19.5" cy="14" r="3.5" fill="white"/>
+            </svg>
+            <span style={{ fontSize: 15, fontWeight: 700, color: '#1f2533', letterSpacing: '-0.3px' }}>SafetyCulture</span>
+          </div>
+          <div className="bg-surface rounded-[12px] w-full" style={{ paddingTop: 24, paddingBottom: 40, paddingLeft: 16, paddingRight: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04)' }}>
             <div className="flex flex-col" style={{ gap: 24 }}>
               <div className="flex flex-col items-center text-center" style={{ gap: 8 }}>
                 <h1 className="text-surface font-bold w-full" style={{ fontSize: 24, lineHeight: '32px', letterSpacing: '-0.5px' }}>Forgot username or password?</h1>
