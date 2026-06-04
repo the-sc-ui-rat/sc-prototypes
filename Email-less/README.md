@@ -9,7 +9,8 @@ A clickable mobile auth flow prototype for SafetyCulture users who don't have an
 | Default SC login | https://app-two-vert.vercel.app | — |
 | Admin flow | https://app-two-vert.vercel.app/?flow=admin | — |
 | Invite link flow | https://app-two-vert.vercel.app/?flow=invite | — |
-| E2E Email-less | https://email-less-prototype.scvercel.dev | [SafetyCulture/email-less-prototype](https://github.com/SafetyCulture/email-less-prototype) |
+| E2E Email-less (SC) | https://email-less-prototype.scvercel.dev | [SafetyCulture/email-less-prototype](https://github.com/SafetyCulture/email-less-prototype) |
+| E2E Email-less (personal) | https://email-less-prototype.vercel.app | — |
 
 ---
 
